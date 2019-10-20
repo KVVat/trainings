@@ -2,9 +2,11 @@ package com.example.udacity.surfconnect;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.facebook.accountkit.AccessToken;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitLoginResult;
@@ -23,6 +25,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         FontHelper.setCustomTypeface(findViewById(R.id.view_root));
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        Log.d("AppLog", "key:" + FacebookSdk.getApplicationSignature(this));
+
         AccessToken accessToken = AccountKit.getCurrentAccessToken();
         if(accessToken != null){
             launchAccountActivity();

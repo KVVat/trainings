@@ -8,6 +8,6 @@
     <string name="email_label">Email</string>
     <string name="logout_label">Log Out</string>
     <string name="facebook_app_id">523098308479447</string>
-    <string name="ACCOUNT_KIT_CLIENT_TOKEN">c397ecdea222b3b2b9f36515c6f44046</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">b5f84863162c48e372dbec806dd31181</string>
     <string name="ak_login_protocol_scheme">ak523098308479447</string>
 </resources>

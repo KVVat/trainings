@@ -25,6 +25,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.4.0'
 
-    implementation 'com.facebook.android:account-kit-sdk:4.+'
-    implementation 'com.facebook.android:facebook-android-sdk:4.+'
+    implementation 'com.facebook.android:account-kit-sdk:5.+'
+    implementation 'com.facebook.android:facebook-android-sdk:5.+'
 }
