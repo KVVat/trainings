@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         });
         createNotificationChannel();
         registerReceiver(mReceiver,new IntentFilter(ACTION_UPDATE_NOTIFICATION));
+        //
+
+
         setNotificationButtonState(true, false, false);
     }
 
@@ -61,17 +64,24 @@ public class MainActivity extends AppCompatActivity {
                 .setContentIntent(notificationPendingIntent)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setDefaults(NotificationCompat.DEFAULT_ALL);
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setDeleteIntent(createOnDismissedIntent(this, 101));
         return notifyBuilder;
     }
     public void sendNotification(){
         //
         Intent updateIntent = new Intent(ACTION_UPDATE_NOTIFICATION);
+        updateIntent.putExtra("com.exmple.notifyme.id", 100);
         PendingIntent updatePendingIntent = PendingIntent.getBroadcast
                 (this, NOTIFICATION_ID, updateIntent, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder notifyBuilder = getNotificationBuilder();
         notifyBuilder.addAction(R.drawable.ic_update, "Update Notification", updatePendingIntent);
+        /* it works on oreo or later
+        Intent intent = new Intent(this, DismissReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 100, intent, 0);
+        notifyBuilder.setDeleteIntent(pendingIntent);
+        */
         mNotifyManager.notify(NOTIFICATION_ID,notifyBuilder.build());
         setNotificationButtonState(false, true, true);
     }
@@ -125,7 +135,33 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateNotification(button_update);
+            int notificationId = intent.getExtras().getInt("com.exmple.notifyme.id");
+            if(notificationId==100){
+                updateNotification(button_update);
+            } else {
+                setNotificationButtonState(true,false,false);
+            }
         }
     }
+
+    private PendingIntent createOnDismissedIntent(Context context, int notificationId) {
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        intent.putExtra("com.exmple.notifyme.id", notificationId);
+
+        PendingIntent pendingIntent =
+                PendingIntent.getBroadcast(context.getApplicationContext(),
+                        notificationId, intent, 0);
+        return pendingIntent;
+    }
+    /* oreo or later
+    public class DismissReceiver extends BroadcastReceiver{
+        public DismissReceiver(){
+
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setNotificationButtonState(true, false, false);
+        }
+    }*/
 }
