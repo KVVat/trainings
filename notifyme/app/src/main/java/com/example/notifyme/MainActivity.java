@@ -3,7 +3,10 @@ package com.example.notifyme;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -37,8 +40,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         createNotificationChannel();
+        registerReceiver(mReceiver,new IntentFilter(ACTION_UPDATE_NOTIFICATION));
         setNotificationButtonState(true, false, false);
     }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mReceiver);
+        super.onDestroy();
+    }
+
     private NotificationCompat.Builder getNotificationBuilder(){
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(this,
@@ -54,7 +65,13 @@ public class MainActivity extends AppCompatActivity {
         return notifyBuilder;
     }
     public void sendNotification(){
+        //
+        Intent updateIntent = new Intent(ACTION_UPDATE_NOTIFICATION);
+        PendingIntent updatePendingIntent = PendingIntent.getBroadcast
+                (this, NOTIFICATION_ID, updateIntent, PendingIntent.FLAG_ONE_SHOT);
+
         NotificationCompat.Builder notifyBuilder = getNotificationBuilder();
+        notifyBuilder.addAction(R.drawable.ic_update, "Update Notification", updatePendingIntent);
         mNotifyManager.notify(NOTIFICATION_ID,notifyBuilder.build());
         setNotificationButtonState(false, true, true);
     }
@@ -79,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         button_cancel.setEnabled(isCancelEnabled);
     }
 
-        /* for Android 8.0 or later*/
+    /* for Android 8.0 or later*/
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
     public void createNotificationChannel()
@@ -96,5 +113,19 @@ public class MainActivity extends AppCompatActivity {
             mNotifyManager.createNotificationChannel(notificationChannel);
         }
 
+    }
+    /* For In-Notification Interaction */
+    private NotificationReceiver mReceiver = new NotificationReceiver();
+    private static final String ACTION_UPDATE_NOTIFICATION =
+            "com.example.android.notifyme.ACTION_UPDATE_NOTIFICATION";
+    public class NotificationReceiver extends BroadcastReceiver{
+        public NotificationReceiver(){
+
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateNotification(button_update);
+        }
     }
 }
