@@ -17,7 +17,9 @@
 package com.example.background;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,6 +31,7 @@ import com.bumptech.glide.Glide;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.work.Data;
 import androidx.work.WorkInfo;
 
 
@@ -65,7 +68,17 @@ public class BlurActivity extends AppCompatActivity {
 
         // Setup blur image file button
         mGoButton.setOnClickListener(view -> mViewModel.applyBlur(getBlurLevel()));
+        mCancelButton.setOnClickListener(view -> mViewModel.cancelWork());
 
+        mOutputButton.setOnClickListener(view -> {
+            Uri currentUri = mViewModel.getOutputUri();
+            if (currentUri != null) {
+                Intent actionView = new Intent(Intent.ACTION_VIEW, currentUri);
+                if (actionView.resolveActivity(getPackageManager()) != null) {
+                    startActivity(actionView);
+                }
+            }
+        });
         mViewModel.getOutputWorkInfo().observe(this,listOfWorkInfos->{
             if(listOfWorkInfos==null || listOfWorkInfos.isEmpty()) return;
             WorkInfo workInfo = listOfWorkInfos.get(0);
@@ -74,6 +87,13 @@ public class BlurActivity extends AppCompatActivity {
                 showWorkInProgress();
             } else {
                 showWorkFinished();
+                Data outputData = workInfo.getOutputData();
+
+                String outputImageUri = outputData.getString(Constants.KEY_IMAGE_URI);
+                if (!TextUtils.isEmpty(outputImageUri)) {
+                    mViewModel.setOutputUri(outputImageUri);
+                    mOutputButton.setVisibility(View.VISIBLE);
+                }
             }
         });
 
