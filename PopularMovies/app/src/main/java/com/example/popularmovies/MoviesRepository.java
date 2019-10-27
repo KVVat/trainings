@@ -1,5 +1,9 @@
 package com.example.popularmovies;
 
+import android.util.Log;
+
+import com.example.popularmovies.model.Detail;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,6 +30,33 @@ public class MoviesRepository {
         }
         return repository;
     }
+
+    public void getDetail(final TMDbGetDetailCallback callback,String id){
+        Log.i("TEST","Run Get Detail"+id);
+        api.getDetail(id,BuildConfig.IMDbAPIKEY, "en-US","")
+                .enqueue(new Callback<Detail>() {
+                    @Override
+                    public void onResponse(Call<Detail> call, Response<Detail> response) {
+                        Log.i("Test",response.toString());
+                        if (response.isSuccessful()) {
+                            Detail moviesResponse = response.body();
+                            if (moviesResponse != null && moviesResponse.getId() != null) {
+                                callback.onSuccess(moviesResponse);
+                            } else {
+                                callback.onError();
+                            }
+                        } else {
+                            callback.onError();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Detail> call, Throwable t) {
+                        Log.i("Test",t.getMessage()+","+t.getLocalizedMessage());
+                        callback.onError();
+                    }
+                });
+    }
+
     public void getMovies(final TMDbGetMoviesCallback callback,String sort) {
         api.getMovies(sort,BuildConfig.IMDbAPIKEY, LANGUAGE, 1)
                 .enqueue(new Callback<ResponseModel>() {
