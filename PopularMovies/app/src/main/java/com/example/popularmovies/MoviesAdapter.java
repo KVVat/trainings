@@ -36,8 +36,8 @@ public class MoviesAdapter extends RecyclerView.Adapter {
         ImageView mPosterView;
         ViewHolder(View v) {
             super(v);
-            mCardView = (CardView)v.findViewById(R.id.card_view);
-            mTextView = (TextView)v.findViewById(R.id.text_view);
+            //mCardView = (CardView)v.findViewById(R.id.card_view);
+            //mTextView = (TextView)v.findViewById(R.id.text_view);
             mPosterView =(ImageView)v.findViewById(R.id.poster_view);
         }
     }

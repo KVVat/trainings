@@ -2,10 +2,14 @@ package com.example.popularmovies;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RecyclerModel {
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+
+public class RecyclerModel extends BaseObservable {
     private Long id;
     private String title;
     private String overview;
+    @Bindable
     @SerializedName("poster_path")
     private String posterPath;
     @SerializedName("backdrop_path")
@@ -70,4 +74,6 @@ public class RecyclerModel {
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+
+
 }
