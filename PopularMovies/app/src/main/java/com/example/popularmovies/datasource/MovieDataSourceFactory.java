@@ -7,24 +7,17 @@ import androidx.paging.DataSource;
 import androidx.paging.PageKeyedDataSource;
 
 public class MovieDataSourceFactory extends DataSource.Factory{
-    //creating the mutable live data
     private MutableLiveData<PageKeyedDataSource<Integer, Movie>> movieLiveDataSource
             = new MutableLiveData<>();
-
+    public static String mSort = "popular";
     @Override
     public DataSource<Integer, Movie> create() {
-        //getting our data source object
         MovieDataSource itemDataSource = new MovieDataSource();
-
-        //posting the datasource to get the values
+        itemDataSource.setSortMode(mSort);
         movieLiveDataSource.postValue(itemDataSource);
-
-        //returning the datasource
         return itemDataSource;
     }
 
-
-    //getter for itemlivedatasource
     public MutableLiveData<PageKeyedDataSource<Integer, Movie>> getItemLiveDataSource() {
         return movieLiveDataSource;
     }

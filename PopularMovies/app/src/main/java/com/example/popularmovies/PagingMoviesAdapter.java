@@ -1,7 +1,6 @@
 package com.example.popularmovies;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,13 +55,13 @@ public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAda
             new DiffUtil.ItemCallback<Movie>() {
                 @Override
                 public boolean areItemsTheSame(Movie oldItem, Movie newItem) {
-                    Log.i("Observe","diff");
+
                     return oldItem.getId() == newItem.getId();
                 }
 
                 @Override
                 public boolean areContentsTheSame(Movie oldItem, Movie newItem) {
-                    Log.i("Observe","diff");
+
                     return oldItem.equals(newItem);
                 }
             };
