@@ -56,7 +56,16 @@ public class MoviesRepository {
                     }
                 });
     }
+    public Response<ResponseModel> getMoviesByPage(String sort, int page) {
+        if(sort == null) sort = "top_rated";
+        try {
+            return api.getMovies(sort, BuildConfig.IMDbAPIKEY, LANGUAGE, page).execute();
 
+        } catch(Exception ex){
+            Log.i("Confirmation","Error retrofit2:"+ex.getMessage());
+            return null;
+        }
+    }
     public void getMovies(String sort) {
         if(sort == null) sort = "top_rated";
         api.getMovies(sort,BuildConfig.IMDbAPIKEY, LANGUAGE, 1)

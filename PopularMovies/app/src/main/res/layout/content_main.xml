@@ -16,14 +16,14 @@
     tools:showIn="@layout/activity_main">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/view_movies"
+        android:id="@+id/view_movies34"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="4dp"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:setAdapter="@{model.getAdapter()}"
+        app:setAdapter="@{model.getAdapter2()}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

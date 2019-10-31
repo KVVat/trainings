@@ -2,6 +2,7 @@ package com.example.popularmovies;
 
 import android.util.Log;
 
+import com.example.popularmovies.model.Movie;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -15,13 +16,13 @@ import retrofit2.Response;
 
 public class ResponseModel extends BaseObservable{
 
-    MutableLiveData<List<RecyclerModel>> mutableMovies = new MutableLiveData<>();
+    MutableLiveData<List<Movie>> mutableMovies = new MutableLiveData<>();
 
     @SerializedName("page")
     private Integer page;
     @Bindable
     @SerializedName("results")
-    List<RecyclerModel> movies;
+    List<Movie> movies;
     @SerializedName("total_pages")
     private Integer pages;
 
@@ -33,11 +34,11 @@ public class ResponseModel extends BaseObservable{
         this.page = page;
     }
 
-    public List<RecyclerModel> getMovies() {
+    public List<Movie> getMovies() {
         return movies;
     }
 
-    public void setMovies(List<RecyclerModel> movies) {
+    public void setMovies(List<Movie> movies) {
         this.movies = movies;
     }
 
@@ -49,7 +50,7 @@ public class ResponseModel extends BaseObservable{
         this.pages = pages;
     }
 
-    public MutableLiveData<List<RecyclerModel>> getMutableMovies() {
+    public MutableLiveData<List<Movie>> getMutableMovies() {
         return mutableMovies;
     }
 

@@ -9,22 +9,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.popularmovies.databinding.ActivityMainBinding;
+import com.example.popularmovies.model.Movie;
 
-import java.util.List;
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnCardViewItemClick{
+public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private MoviesAdapter mMoviesAdapter;
+    //private MoviesAdapter mMoviesAdapter;
     private MoviesRepository mMoviesRepository;
     private Toolbar mToolbar;
     private SharedPreferences mPreference;
@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnC
 
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView)findViewById(R.id.view_movies);
-
-
         /*mMoviesRepository = MoviesRepository.getInstance();*/
         mToolbar = findViewById(R.id.toolbar);
         /*mPreference = this.getSharedPreferences("popular_movie",MODE_PRIVATE);
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnC
         ActivityMainBinding activityBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         if (savedInstanceState == null) {
-            viewModel.init();
+            viewModel.init(this);
         }
         activityBinding.setModel(viewModel);
         //Log.i("aaa","startbinding");
@@ -61,20 +59,35 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnC
     private void setupListUpdate() {
        // Log.i("Changed","setupListUpdate called");
         //viewModel.loading.set(View.VISIBLE);
-        viewModel.fetchList();
-        viewModel.getMutableMovies().observe(this, new Observer<List<RecyclerModel>>() {
+        //final PagingMoviesAdapter adapter = new PagingMoviesAdapter(this);
+        final RecyclerView rv = (RecyclerView)findViewById(R.id.view_movies);
+        rv.setAdapter(viewModel.getAdapter2());
+        rv.setNestedScrollingEnabled(true);
+        viewModel.moviePagedList.observe(this, new Observer<PagedList<Movie>>() {
             @Override
-            public void onChanged(List<RecyclerModel> recyclerModels) {
+            public void onChanged(@Nullable PagedList<Movie> items) {
+
+                //in case of any changes
+                //submitting the items to adapter
+                Log.i("Observe","observe called"+items.toString());
+                viewModel.getAdapter2().submitList(items);
+            }
+        });
+        /*
+        viewModel.fetchList();
+        viewModel.getMutableMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
                 //Log.i("Changed","chanegd");
-                if (recyclerModels.size() == 0) {
+                if (movies.size() == 0) {
                     //viewModel.showEmpty.set(View.VISIBLE);
                 } else {
                     //viewModel.showEmpty.set(View.GONE);
-                    viewModel.setResponseModelInAdapter(recyclerModels);
+                    viewModel.setResponseModelInAdapter(movies);
                 }
             }
 
-        });
+        });*/
         setupListClick();
     }
     private void setupListClick()
@@ -87,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnC
         String sort = mSortMode==0?"popular":"top_rated";
         mMoviesRepository.getMovies(new TMDbGetMoviesCallback() {
             @Override
-            public void onSuccess(List<RecyclerModel> movies) {
+            public void onSuccess(List<Movie> movies) {
                 Log.i("movie","success."+movies.toString());
                 mMoviesAdapter = new MoviesAdapter(movies,self,self);
                 mRecyclerView.setAdapter(mMoviesAdapter);
@@ -107,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnC
     }
 
     public static String EXTRA_ID_FROM_LIST="EXTRA_ID_FROM_LIST";
-    @Override
+    //@Override
     public void onClick(Long id,Integer position) {
         Log.i("tag","clicked "+position+","+id);
         Intent intent = new Intent(this,DetailActivity.class);

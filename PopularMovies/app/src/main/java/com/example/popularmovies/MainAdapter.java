@@ -3,6 +3,8 @@ package com.example.popularmovies;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.example.popularmovies.model.Movie;
+
 import java.util.List;
 
 import androidx.annotation.LayoutRes;
@@ -13,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.GenericViewHolder> {
     private int layoutId;
-    private List<RecyclerModel> movies;
+    private List<Movie> movies;
     private MainViewModel viewModel;
     public MainAdapter(@LayoutRes int layoutId, MainViewModel viewModel) {
         this.layoutId = layoutId;
@@ -45,7 +47,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.GenericViewHol
     public int getItemViewType(int position) {
         return getLayoutIdForPosition(position);
     }
-    public void setRecyclerModel(List<RecyclerModel> movies) {
+    public void setRecyclerModel(List<Movie> movies) {
         this.movies = movies;
     }
     class GenericViewHolder extends RecyclerView.ViewHolder {
@@ -60,7 +62,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.GenericViewHol
             //viewModel.fetchList();
             //viewModel.fetchMovieImagesAt(position);
             viewModel.fetchMovieImagesAt(position);
-            binding.setVariable(BR.viewModel, viewModel);
+            //binding.setVariable(BR.viewModel, viewModel);
             binding.setVariable(BR.position, position);
             binding.executePendingBindings();
         }

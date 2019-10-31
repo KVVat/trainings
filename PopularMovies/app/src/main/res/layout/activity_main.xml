@@ -38,13 +38,11 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/view_movies"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="0dp"
-            android:layout_marginBottom="4dp"
-            android:clipToPadding="false"
+            android:layout_marginBottom="0dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:setAdapter="@{model.getAdapter()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
