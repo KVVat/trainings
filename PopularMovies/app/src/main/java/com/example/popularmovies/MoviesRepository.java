@@ -15,7 +15,7 @@ public class MoviesRepository {
     private static final String LANGUAGE = "en-US";
 
     private static MoviesRepository repository;
-    TMDbInterface api;
+    public TMDbInterface api;
     private MoviesRepository(TMDbInterface api) {
         this.api = api;
     }
@@ -56,27 +56,31 @@ public class MoviesRepository {
                     }
                 });
     }
+    public Response<ResponseModel> getMoviesByPage(String sort, int page) {
+        if(sort == null) sort = "top_rated";
+        try {
+            return api.getMovies(sort, BuildConfig.IMDbAPIKEY, LANGUAGE, page).execute();
 
-    public void getMovies(final TMDbGetMoviesCallback callback,String sort) {
+        } catch(Exception ex){
+            Log.i("Confirmation","Error retrofit2:"+ex.getMessage());
+            return null;
+        }
+    }
+    public void getMovies(String sort) {
+        if(sort == null) sort = "top_rated";
         api.getMovies(sort,BuildConfig.IMDbAPIKEY, LANGUAGE, 1)
                 .enqueue(new Callback<ResponseModel>() {
                     @Override
                     public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                         if (response.isSuccessful()) {
                             ResponseModel moviesResponse = response.body();
-                            if (moviesResponse != null && moviesResponse.getMovies() != null) {
-                                callback.onSuccess(moviesResponse.getMovies());
-                            } else {
-                                callback.onError();
-                            }
-                        } else {
-                            callback.onError();
+
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseModel> call, Throwable t) {
-                        callback.onError();
+                       Log.e("test","failure");
                     }
                 });
     }
