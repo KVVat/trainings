@@ -1,2 +1,3 @@
 # trainings
-Trainigs_for_mywork
+
+Android Development trainigs for my work.
