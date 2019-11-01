@@ -1,8 +1,10 @@
-package com.example.popularmovies;
+package com.example.popularmovies.model;
 
+import androidx.annotation.Nullable;
+import androidx.databinding.BaseObservable;
 import com.google.gson.annotations.SerializedName;
 
-public class RecyclerModel {
+public class Movie extends BaseObservable {
     private Long id;
     private String title;
     private String overview;
@@ -69,5 +71,10 @@ public class RecyclerModel {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return super.equals(obj);
     }
 }
