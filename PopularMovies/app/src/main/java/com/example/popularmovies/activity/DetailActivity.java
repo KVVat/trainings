@@ -8,9 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.popularmovies.constants.Constants;
-import com.example.popularmovies.databinding.ActivityDetailBinding;
 import com.example.popularmovies.R;
 
+import com.example.popularmovies.databinding.ActivityDetailBinding;
 import com.example.popularmovies.viewmodel.DetailViewModel;
 
 import androidx.appcompat.app.ActionBar;
