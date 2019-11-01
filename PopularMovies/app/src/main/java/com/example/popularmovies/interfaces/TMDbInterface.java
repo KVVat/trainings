@@ -1,6 +1,7 @@
-package com.example.popularmovies;
+package com.example.popularmovies.interfaces;
 
 import com.example.popularmovies.model.Detail;
+import com.example.popularmovies.model.ResultMovies;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -9,10 +10,10 @@ import retrofit2.http.Query;
 
 public interface TMDbInterface {
     @GET("movie/{sort}")
-    Call<ResponseModel> getMovies(@Path("sort") String sort,
-                                        @Query("api_key") String apiKey,
-                                         @Query("language") String language,
-                                         @Query("page") int page
+    Call<ResultMovies> getMovies(@Path("sort") String sort,
+                                 @Query("api_key") String apiKey,
+                                 @Query("language") String language,
+                                 @Query("page") int page
     );
     @GET("movie/{movie_id}")
     Call<Detail> getDetail(@Path("movie_id") String id,

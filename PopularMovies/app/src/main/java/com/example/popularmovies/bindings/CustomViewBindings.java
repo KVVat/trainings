@@ -1,19 +1,15 @@
-package com.example.popularmovies;
+package com.example.popularmovies.bindings;
 
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.popularmovies.BuildConfig;
 
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.popularmovies.R;
 
 public class CustomViewBindings {
-    @BindingAdapter("setAdapter")
-    public static void bindRecyclerViewAdapter(RecyclerView recyclerView, RecyclerView.Adapter<?> adapter) {
-        //recyclerView.setHasFixedSize(true);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(adapter);
-    }
 
     @BindingAdapter("imageUrl")
     public static void bindRecyclerViewAdapter(ImageView imageView, String imageUrl) {
@@ -23,8 +19,7 @@ public class CustomViewBindings {
             if (imageView.getTag(R.id.poster_view) == null || !imageView.getTag(R.id.poster_view).equals(imageUrl)) {
                 imageView.setImageBitmap(null);
                 imageView.setTag(R.id.poster_view, imageUrl);
-                Glide.with(imageView).load(BuildConfig.IMDbIMGPATH+imageUrl)
-                        //.override(Target.SIZE_ORIGINAL)
+                Glide.with(imageView).load(BuildConfig.TMDbIMGPATH+imageUrl)
                         .into(imageView);
             }
         } else {

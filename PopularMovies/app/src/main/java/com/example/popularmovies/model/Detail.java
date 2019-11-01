@@ -1,9 +1,20 @@
 package com.example.popularmovies.model;
 
+import android.util.Log;
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.bumptech.glide.Glide;
+import com.example.popularmovies.BuildConfig;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+/**
+ * https://developers.themoviedb.org/3/movies/get-movie-details
+ */
 public class Detail {
     Boolean adult;
     String backdropPath;
@@ -17,12 +28,11 @@ public class Detail {
     String originalTitle;
     String overview;
     Double popularity;
-
-
     @SerializedName("poster_path")
     String posterPath;
     List<ProductionCompany> productionCompanies;
     List<ProductionCountry> productionCountries;
+    @SerializedName("release_date")
     String releaseDate;
     Integer revenue;
     Integer runtime;
@@ -31,6 +41,7 @@ public class Detail {
     String tagline;
     String title;
     Boolean video;
+    @SerializedName("vote_average")
     Double voteAverage;
     Integer voteCount;
 
