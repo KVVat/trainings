@@ -12,12 +12,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         def properties = new Properties()
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        def IMDbAPIKEY = properties.getProperty("imdb.apikey")
-        buildConfigField("String", "IMDbAPIKEY", "\"${IMDbAPIKEY}\"")
-        buildConfigField("String","IMDbIMGPATH","\"http://image.tmdb.org/t/p/w185\"")
+        def TMDbAPIKEY = properties.getProperty("imdb.apikey")
+        buildConfigField("String", "TMDbAPIKEY", "\"${TMDbAPIKEY}\"")
+        buildConfigField("String","TMDbIMGPATH","\"http://image.tmdb.org/t/p/w185\"")
     }
     buildTypes {
         release {
