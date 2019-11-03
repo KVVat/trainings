@@ -1,13 +1,5 @@
 package com.example.popularmovies.model;
 
-import android.util.Log;
-import android.widget.ImageView;
-
-import androidx.databinding.BindingAdapter;
-
-import com.bumptech.glide.Glide;
-import com.example.popularmovies.BuildConfig;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -44,6 +36,8 @@ public class Detail {
     @SerializedName("vote_average")
     Double voteAverage;
     Integer voteCount;
+
+
 
     public Boolean getAdult() {
         return adult;
@@ -237,5 +231,16 @@ public class Detail {
 
     public void setVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
+    }
+
+    /* For Data Transfer*/
+    Trailers trailers;
+
+    public Trailers getTrailers() {
+        return trailers;
+    }
+
+    public void setTrailers(Trailers trailers) {
+        this.trailers = trailers;
     }
 }

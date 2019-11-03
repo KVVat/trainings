@@ -3,49 +3,56 @@ package com.example.popularmovies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.databinding.DataBindingUtil;
-
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.popularmovies.R;
 import com.example.popularmovies.constants.Constants;
 import com.example.popularmovies.databinding.ActivityMainBinding;
-
 import com.example.popularmovies.datasource.MovieDataSourceFactory;
 import com.example.popularmovies.utils.NetworkUtil;
 import com.example.popularmovies.utils.SharedPreferenceUtil;
 import com.example.popularmovies.viewmodel.MainViewModel;
-import com.example.popularmovies.R;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
     private Integer mSortMode;
-
+    private RecyclerView mRecyclerView;
+    private Parcelable listState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
-
         setContentView(R.layout.activity_main);
 
+        mRecyclerView = findViewById(R.id.list_movies);
+        Log.i("Observe","saveState:"+savedInstanceState);
+        if(savedInstanceState != null) {
+            listState = savedInstanceState.getParcelable("ListState");
+
+        }
         mSortMode = SharedPreferenceUtil.getInstance(this).getSortMode();
         MovieDataSourceFactory.setSort(sortKey(mSortMode));
-        Intent intent = new Intent(this,DetailActivity.class);
+
+        /*Intent intent = new Intent(this,DetailActivity.class);
         intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,24L);
         startActivity(intent);
+        */
+
         setupBindings(savedInstanceState);
+
 
         /*
          * We need to place setup Toolbar in here
@@ -54,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         setupMenuTitle(mSortMode);
-
-
     }
 
     @Override
@@ -72,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
             viewModel.init(this);
             viewModel.getAdapter().setOnItemClickListener(view->{
                 Long id = (Long)view.getTag(R.string.card_movie_id);
-                Intent intent = new Intent(this,DetailActivity.class);
+                Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,id);
                 startActivity(intent);
             });
@@ -83,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupListUpdate() {
 
-        //viewModel.loading.set(View.VISIBLE);
+        viewModel.loading.set(View.VISIBLE);
 
         final RecyclerView rv = findViewById(R.id.list_movies);
         rv.setAdapter(viewModel.getAdapter());
         rv.setNestedScrollingEnabled(true);
 
         viewModel.moviePagedList.observe(this,items->{
-            //Log.i("Observe","observe called"+viewModel.getAdapter().getItemCount());
+            Log.i("Observe","observe called"+viewModel.getAdapter().getItemCount());
             viewModel.loading.set(View.GONE);
             if(viewModel.getAdapter()!=null) {
                 viewModel.getAdapter().submitList(items);
@@ -99,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     viewModel.showEmpty.set(View.GONE);
                 }
+                mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
             }
         });
     }
@@ -177,5 +184,23 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return "top_rated";
         }
+    }
+
+
+    private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i("Observe","restoreState called"+savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.i("Observe","saveState called");
+        outState.putParcelable("ListState", mRecyclerView.getLayoutManager().onSaveInstanceState());
+        super.onSaveInstanceState(outState);
+        //outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
+
     }
 }

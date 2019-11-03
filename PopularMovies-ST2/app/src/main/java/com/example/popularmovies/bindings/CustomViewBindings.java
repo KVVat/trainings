@@ -4,13 +4,16 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.popularmovies.BuildConfig;
+import com.example.popularmovies.R;
 
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.popularmovies.R;
 
 public class CustomViewBindings {
-
+    @BindingAdapter("setAdapter")
+    public static void bindRecyclerViewAdapter(RecyclerView recyclerView, RecyclerView.Adapter<?> adapter) {
+        recyclerView.setAdapter(adapter);
+    }
     @BindingAdapter("imageUrl")
     public static void bindRecyclerViewAdapter(ImageView imageView, String imageUrl) {
         if (imageUrl != null) {

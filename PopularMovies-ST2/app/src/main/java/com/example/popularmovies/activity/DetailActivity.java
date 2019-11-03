@@ -1,17 +1,20 @@
 package com.example.popularmovies.activity;
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 
+import com.example.popularmovies.R;
+import com.example.popularmovies.api.FavoriteRepository;
 import com.example.popularmovies.constants.Constants;
 import com.example.popularmovies.databinding.ActivityDetailBinding;
-import com.example.popularmovies.R;
-
+import com.example.popularmovies.model.Favorite;
 import com.example.popularmovies.viewmodel.DetailViewModel;
 
 import androidx.appcompat.app.ActionBar;
@@ -19,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -45,10 +49,12 @@ public class DetailActivity extends AppCompatActivity {
 
         CheckBox checkBox = findViewById(R.id.checkFavorite);
         checkBox.setOnClickListener(v->{
-            CheckBox checkbox = (CheckBox)v;
-            if(checkBox.isChecked()){
+            CheckBox chk = (CheckBox)v;
+            if(chk.isChecked()){
+                FavoriteRepository.getInstance().insert(new Favorite(movieId.intValue(),true));
                 //Write Like To Database
             } else {
+                FavoriteRepository.getInstance().insert(new Favorite(movieId.intValue(),false));
                 //Safedelete Like To Database
             }
         });
@@ -64,25 +70,40 @@ public class DetailActivity extends AppCompatActivity {
         mBinding =
                 DataBindingUtil.setContentView(this,R.layout.activity_detail);
         viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
+        if(savedInstanceState == null){
+            viewModel.init();
+            viewModel.getTrailerAdapter().setOnItemClickListener(view->{
+                String site = (String)view.getTag(R.string.trailer_url);
+                //Log.i("Observe",site);
+                Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://www.youtube.com/watch?v=" + site));
+                Intent chooser = Intent.createChooser(webIntent,"Chooser Application");
+                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + site));
+
+                try {
+                    this.startActivity(chooser);
+                    //this.startActivity(appIntent);
+                } catch (ActivityNotFoundException ex) {
+
+                };
+            });
+        }
         mBinding.setModel(viewModel);
         updateDetail();
     }
 
     private void updateDetail(){
         if(movieId != null && movieId !=0) {
-            viewModel.getDetail(movieId).observe(this, detail -> {
+
+            final RecyclerView rv = findViewById(R.id.list_trailers);
+            rv.setAdapter(viewModel.getTrailerAdapter());
+            rv.setNestedScrollingEnabled(true);
+
+            viewModel.getDetail(movieId).observe(this,detail -> {
                 mBinding.setDetail(detail);
                 mBinding.setLifecycleOwner(this);
             });
-
-            viewModel.getTrailers(movieId).observe(this, trailers -> {
-                //mBinding.setTrailers(detail);
-                //mBinding.setLifecycleOwner(this);
-                //TrailerAdapter adapter = new TrailerAdapter(this,R.layout.trailer_row,trailers);
-                //ListView listView = findViewById(R.id.lvTrailers);
-                //listView.setAdapter(adapter);
-                //listView.setAdapter(adapter);
-            });
+            viewModel.getIsFavorite(movieId.intValue());
         }
     }
     @Override

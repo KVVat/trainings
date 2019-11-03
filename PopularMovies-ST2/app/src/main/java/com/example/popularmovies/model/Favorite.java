@@ -10,21 +10,21 @@ public class Favorite {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "movie_id")
-    private String movieId;
+    private Integer movieId;
     @ColumnInfo(name = "is_favorite")
     private Boolean isFavorite;
 
-    public Favorite(String movieId,Boolean isFavorite){
+    public Favorite(Integer movieId,Boolean isFavorite){
         this.movieId = movieId;
         this.isFavorite = isFavorite;
     }
 
     @NonNull
-    public String getMovieId() {
+    public Integer getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(@NonNull String movieId) {
+    public void setMovieId(@NonNull Integer movieId) {
         this.movieId = movieId;
     }
 

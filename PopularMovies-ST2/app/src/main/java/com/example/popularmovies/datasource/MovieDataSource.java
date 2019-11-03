@@ -2,15 +2,14 @@ package com.example.popularmovies.datasource;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.paging.PageKeyedDataSource;
-
 import com.example.popularmovies.api.MoviesDbRepository;
 import com.example.popularmovies.model.Movie;
 import com.example.popularmovies.model.ResultMovies;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.paging.PageKeyedDataSource;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,14 +18,15 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
     public static final int PAGE_SIZE = 20;
     private static final int FIRST_PAGE = 1;
 
-    private String mSortMode=null;
+    private String mSortMode="top_rated";
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull final LoadInitialCallback<Integer, Movie> callback) {
-
+        Log.i("Observe",mSortMode);
         MoviesDbRepository.getInstance().getMoviesByPageCb(new Callback<ResultMovies>() {
             @Override
             public void onResponse(Call<ResultMovies> call, Response<ResultMovies> response) {
+
                 if(response != null && response.body()!=null){
                     List<Movie> lm = response.body().getMovies();
                     callback.onResult(lm,null, FIRST_PAGE+1);

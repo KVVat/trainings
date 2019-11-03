@@ -3,28 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="position"
+            name="posTrailer"
             type="java.lang.Integer" />
+        <variable
+            name="model"
+            type="com.example.popularmovies.viewmodel.DetailViewModel" />
         <variable
             name="trailer"
             type="com.example.popularmovies.model.Trailer" />
     </data>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
     <ImageView
-        android:id="@+id/trailerThumbnail"
-        android:layout_width="44dp"
+        android:layout_width="20dp"
         android:layout_height="44dp"
-        android:padding="3dp" />
+        android:src="@drawable/ic_star_on"
+        android:gravity="center_vertical"
+        ></ImageView>
+
     <TextView
         android:id="@+id/trailerText"
         android:layout_width="wrap_content"
         android:layout_height="44dp"
         android:textColor="#000"
         android:padding="5dp"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:text="Sample Text"/>
+        android:gravity="center_vertical|left"
+        android:maxLines="2"
+        android:text="@{trailer.name}"/>
 </LinearLayout>
 </layout>

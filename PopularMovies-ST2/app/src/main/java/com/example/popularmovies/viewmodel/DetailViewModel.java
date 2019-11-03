@@ -3,22 +3,28 @@ package com.example.popularmovies.viewmodel;
 import android.util.Log;
 import android.view.View;
 
-import androidx.databinding.ObservableInt;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
-import com.example.popularmovies.model.Detail;
+import com.example.popularmovies.BuildConfig;
+import com.example.popularmovies.R;
+import com.example.popularmovies.apdater.TrailerAdapter;
+import com.example.popularmovies.api.FavoriteRepository;
 import com.example.popularmovies.api.MoviesDbRepository;
+import com.example.popularmovies.constants.Constants;
+import com.example.popularmovies.model.Detail;
 import com.example.popularmovies.model.Trailer;
 import com.example.popularmovies.model.Trailers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class DetailViewModel extends ViewModel {
 
@@ -26,69 +32,83 @@ public class DetailViewModel extends ViewModel {
 
     public ObservableInt errorLayout= new ObservableInt(View.GONE);
     public ObservableInt mainLayout= new ObservableInt(View.GONE);
+    public ObservableBoolean isFavorite = new ObservableBoolean();
 
-    private MutableLiveData<Detail> mutableDetail = new MutableLiveData<>();
-    private MutableLiveData<List<Trailer>> mutableTrailers = new MutableLiveData<>();
+    public FavoriteRepository favoriteRepository;
 
-
+    public MutableLiveData<Detail> mutableDetail = new MutableLiveData<>();
+    private TrailerAdapter trailerAdapter;
     public void init() {
-        //errorLayout = new ObservableInt(View.GONE);
-        //mainLayout = new ObservableInt(View.GONE);
+        trailerAdapter = new TrailerAdapter(R.layout.trailer_row,this);
+
+        //favoriteRepository = FavoriteRepository.getInstance();
+    }
+    public TrailerAdapter getTrailerAdapter() {
+        return trailerAdapter;
+    }
+
+    public ObservableBoolean getIsFavorite(Integer movieId){
+        Boolean b = FavoriteRepository.getInstance().isFavoirte(movieId);
+        isFavorite.set(false);
+        Log.i("Observe","get"+b);
+        if(b  != null)
+            isFavorite.set(b);
+
+        return isFavorite;
     }
 
 
-    public LiveData<List<Trailer>> getTrailers(Long movie_id) {
+    public Trailer getTrailerAt(int pos){
+        if(mutableDetail != null) {
+            Trailers trailers = mutableDetail.getValue().getTrailers();
+            List<Trailer> lists = trailers.getResults();
+            if(lists.size() != 0 && lists.size()+1>pos){
+                return lists.get(pos);
+            }
+        }
+        return null;
+    }
+    public MutableLiveData<Detail> getDetail(Long movie_id) {
+        Log.i("Observe","getDetail Starts");
+        List<Observable<?>> rq = new ArrayList<>();
+        String id = movie_id.toString();
+        rq.add(MoviesDbRepository.getInstance().getApi().getDetail(
+                id, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE,""));
+        rq.add(MoviesDbRepository.getInstance().getApi().getTrailers(
+                id, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE));
 
-        MoviesDbRepository.getInstance().getTrailers(new Callback<Trailers>() {
+        Observable.zip(
+            rq,new Function<Object[], Object>() {
             @Override
-            public void onResponse(Call<Trailers> call, Response<Trailers> response) {
-                if (response.isSuccessful()) {
-                    Trailers moviesResponse = response.body();
-                    if(moviesResponse.getResults()!=null && moviesResponse.getResults().size()>0) {
-                        mutableTrailers.setValue(moviesResponse.getResults());
+            public Object apply(Object[] objects) throws Exception {
+                Detail detail = new Detail();
+                if(objects.length>=2){
+                    detail = (Detail)objects[0];
+                    detail.setTrailers((Trailers)objects[1]);
+                }
+                return (Object)detail;
+            }})
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(
+                  new Consumer<Object>(){
+                      @Override
+                      public void accept(Object o) throws Exception {
+                          Log.i("Observe","rx:success"+o.toString());
+                          mutableDetail.setValue((Detail)o);
+                          errorLayout.set(View.GONE);
+                          mainLayout.set(View.VISIBLE);
+                      }
+                  },new Consumer<Object>(){
+                        @Override
+                        public void accept(Object o) throws Exception {
+                            Log.i("Observe","rx:error:"+o.toString());
+                            errorLayout.set(View.VISIBLE);
+                            mainLayout.set(View.GONE);
+                            mutableDetail.setValue(new Detail());
+                        }
                     }
-                }
-            }
+             );
 
-            @Override
-            public void onFailure(Call<Trailers> call, Throwable t) {
-                Log.i(TAG,"Failed to load trailers."+t.toString());
-                //errorLayout.set(View.VISIBLE);
-                //mainLayout.set(View.GONE);
-                mutableTrailers.setValue(new ArrayList<>());
-            }
-        },movie_id.toString());
-
-        return mutableTrailers;
-    }
-
-
-    public LiveData<Detail> getDetail(Long movie_id) {
-
-        MoviesDbRepository.getInstance().getDetail(new Callback<Detail>() {
-            @Override
-            public void onResponse(Call<Detail> call, Response<Detail> response) {
-                if (response.isSuccessful()) {
-                    Detail moviesResponse = response.body();
-                    Log.i(TAG,"Load Movie OK."+moviesResponse.getOriginalTitle());
-
-                    mutableDetail.setValue(moviesResponse);
-                    errorLayout.set(View.GONE);
-                    mainLayout.set(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Detail> call, Throwable t) {
-                Log.i(TAG,"Failed to load movie."+t.toString());
-                errorLayout.set(View.VISIBLE);
-                mainLayout.set(View.GONE);
-                mutableDetail.setValue(new Detail());
-            }
-        },movie_id.toString());
-        //}
         return mutableDetail;
     }
-
-
 }

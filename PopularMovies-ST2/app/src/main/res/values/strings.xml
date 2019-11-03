@@ -13,5 +13,6 @@
     <string name="reload_screen">Reload screen</string>
     <string name="card_position_id">card_position</string>
     <string name="card_movie_id">movie_id</string>
+    <string name="trailer_url">trailer_url</string>
 
 </resources>

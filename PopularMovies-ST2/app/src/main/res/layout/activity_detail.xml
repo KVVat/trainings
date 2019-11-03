@@ -11,9 +11,7 @@
     <variable
         name="detail"
         type="com.example.popularmovies.model.Detail" />
-    <!--variable
-        name="trailers"
-        type="java.util.List<com.example.popularmovies.model.Trailer>" -->
+
 
     <!--variable name="detail" type="com.example.popularmovies.model.Detail"-->
 </data>
@@ -143,7 +141,7 @@
                 android:layout_marginLeft="350dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:maxHeight="280dp"
                 android:text="@{detail.overview}" />
 
@@ -154,21 +152,22 @@
                 android:layout_below="@+id/detailUserRating"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="0dp"
-
+                android:checked="@{model.isFavorite}"
                 android:button="@drawable/btn_star_selector"
                 android:layout_toEndOf="@+id/detailPosterView"
                 android:text="Favorite" />
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/lvTrailers"
+                android:id="@+id/list_trailers"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
                 android:layout_below="@id/detailOverview"
                 app:spanCount="1" />
 

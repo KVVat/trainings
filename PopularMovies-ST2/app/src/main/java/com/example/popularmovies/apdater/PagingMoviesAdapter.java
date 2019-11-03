@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.popularmovies.BuildConfig;
@@ -67,11 +68,14 @@ public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAda
     public class MovieViewHolder extends RecyclerView.ViewHolder {
 
         public final ImageView imageView;
+        final TextView textView;
         final CardView cardView;
+
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView = (CardView) itemView;
             imageView = itemView.findViewById(R.id.poster_view);
+            textView = itemView.findViewById(R.id.text_view);
         }
 
         public void bindTo(Movie item, int position) {
@@ -80,10 +84,16 @@ public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAda
             cardView.setTag(R.string.card_position_id,position);
 
             imageView.setImageBitmap(null);
+            textView.setText(null);
             imageView.setTag(R.id.poster_view, item.getPosterPath());
-            //
-            Glide.with(imageView).load(BuildConfig.TMDbIMGPATH + item.getPosterPath())
-                    .into(imageView);
+            //Some Content has no poster path.
+            String posterPath = item.getPosterPath();
+            if(posterPath != null) {
+                Glide.with(imageView).load(BuildConfig.TMDbIMGPATH + item.getPosterPath())
+                        .into(imageView);
+            } else {
+                textView.setText(item.getTitle());
+            }
         }
     }
 }
