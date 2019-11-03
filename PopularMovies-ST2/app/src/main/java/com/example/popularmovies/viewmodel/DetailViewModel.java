@@ -34,8 +34,6 @@ public class DetailViewModel extends ViewModel {
     public ObservableInt mainLayout= new ObservableInt(View.GONE);
     public ObservableBoolean isFavorite = new ObservableBoolean();
 
-    public FavoriteRepository favoriteRepository;
-
     public MutableLiveData<Detail> mutableDetail = new MutableLiveData<>();
     private TrailerAdapter trailerAdapter;
     public void init() {

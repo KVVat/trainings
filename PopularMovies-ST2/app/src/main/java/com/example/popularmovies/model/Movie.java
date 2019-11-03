@@ -1,10 +1,18 @@
 package com.example.popularmovies.model;
 
-import androidx.annotation.Nullable;
-import androidx.databinding.BaseObservable;
 import com.google.gson.annotations.SerializedName;
 
+import androidx.annotation.Nullable;
+import androidx.databinding.BaseObservable;
+
 public class Movie extends BaseObservable {
+
+    public Movie(Favorite fav){
+        this.id = fav.getMovieId().longValue();
+        this.posterPath = fav.getPosterPath();
+        this.title = fav.getTitle();
+    }
+
     private Long id;
     private String title;
     private String overview;

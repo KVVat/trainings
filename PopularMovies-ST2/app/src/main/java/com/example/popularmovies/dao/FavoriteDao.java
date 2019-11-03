@@ -16,8 +16,8 @@ public interface FavoriteDao {
     @Query("SELECT COUNT(*) from favorite where is_favorite=1")
     public Integer getFavoriteCount();
 
-    @Query("SELECT movie_id from favorite  where is_favorite=1 ORDER BY movie_id LIMIT :limit OFFSET :offset")
-    public List<Integer> getFavoritesLimitOffset(Integer limit,Integer offset);
+    @Query("SELECT * from favorite  where is_favorite=1 ORDER BY movie_id LIMIT :limit OFFSET :offset")
+    public List<Favorite> getFavoritesLimitOffset(Integer limit,Integer offset);
 
     //fun getUsersLimitOffset(limit: Int, offset: Int): List<User>
 

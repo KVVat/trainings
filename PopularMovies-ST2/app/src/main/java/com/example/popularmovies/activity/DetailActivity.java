@@ -14,6 +14,7 @@ import com.example.popularmovies.R;
 import com.example.popularmovies.api.FavoriteRepository;
 import com.example.popularmovies.constants.Constants;
 import com.example.popularmovies.databinding.ActivityDetailBinding;
+import com.example.popularmovies.model.Detail;
 import com.example.popularmovies.model.Favorite;
 import com.example.popularmovies.viewmodel.DetailViewModel;
 
@@ -50,11 +51,14 @@ public class DetailActivity extends AppCompatActivity {
         CheckBox checkBox = findViewById(R.id.checkFavorite);
         checkBox.setOnClickListener(v->{
             CheckBox chk = (CheckBox)v;
+            Detail detail = viewModel.mutableDetail.getValue();
             if(chk.isChecked()){
-                FavoriteRepository.getInstance().insert(new Favorite(movieId.intValue(),true));
+                FavoriteRepository.getInstance().insert(new Favorite(
+                        movieId.intValue(),true,detail.getTitle(),detail.getPosterPath()));
                 //Write Like To Database
             } else {
-                FavoriteRepository.getInstance().insert(new Favorite(movieId.intValue(),false));
+                FavoriteRepository.getInstance().insert(new Favorite(
+                        movieId.intValue(),false, detail.getTitle(),detail.getPosterPath()));
                 //Safedelete Like To Database
             }
         });

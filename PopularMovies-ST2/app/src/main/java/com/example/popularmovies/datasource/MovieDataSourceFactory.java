@@ -1,18 +1,19 @@
 package com.example.popularmovies.datasource;
 
+import com.example.popularmovies.constants.MovieSortMode;
+import com.example.popularmovies.model.Movie;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 import androidx.paging.PageKeyedDataSource;
-
-import com.example.popularmovies.model.Movie;
 
 
 public class MovieDataSourceFactory extends DataSource.Factory{
     private MutableLiveData<PageKeyedDataSource<Integer, Movie>> movieLiveDataSource
             = new MutableLiveData<>();
 
-    private static String mSort = "popular";
-    public static void setSort(String sort){ mSort = sort;}
+    private static MovieSortMode mSort = MovieSortMode.SORT_MODE_POPULAR;//"popular";
+    public static void setSort(MovieSortMode sort){ mSort = sort;}
 
     @Override
     public DataSource<Integer, Movie> create() {

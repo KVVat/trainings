@@ -8,6 +8,8 @@ import com.example.popularmovies.applilcation.ApplicationContext;
 import com.example.popularmovies.dao.FavoriteDao;
 import com.example.popularmovies.model.Favorite;
 
+import java.util.List;
+
 public class FavoriteRepository {
     private FavoriteDao mFavoriteDao;
     private static FavoriteRepository sInstance;
@@ -28,7 +30,11 @@ public class FavoriteRepository {
         return sInstance;
     }
 
+    public List<Favorite> getFavoriteLimitOffset(int limit,int offset){
+        return mFavoriteDao.getFavoritesLimitOffset(limit,offset);
+        //new favoriteListAsyncTask(mFavoriteDao).execute(offset);
 
+    }
     public Boolean isFavoirte(final Integer movieId) {
         Boolean r = mFavoriteDao.isFavorite(movieId);
         return r;
@@ -38,6 +44,8 @@ public class FavoriteRepository {
         Log.i("Observe","Insert Called "+favorite.getMovieId()+","+favorite.getFavorite());
         new insertAsyncTask(mFavoriteDao).execute(favorite);
     }
+
+
 
     private static class insertAsyncTask extends AsyncTask<Favorite, Void, Void> {
 
