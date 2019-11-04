@@ -34,7 +34,12 @@ public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAda
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         // I can't use data-binding in here.(In that case Jetpack paging method didn't call.
         // It looks need to pass each Items to the viewholder to use, Jetpack paging.
-        holder.bindTo(getItem(position), position);
+        Movie movie = getItem(position);
+        if(movie != null) {
+            holder.bindTo(movie, position);
+        } else {
+            holder.bindTo(new Movie("(Load failure)",0),position);
+        }
         holder.cardView.setOnClickListener(view->{ listener.onClick(view); });
     }
 

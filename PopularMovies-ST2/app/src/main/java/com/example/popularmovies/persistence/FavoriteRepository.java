@@ -11,7 +11,7 @@ import java.util.List;
 public class FavoriteRepository {
     private FavoriteDao mFavoriteDao;
     private static FavoriteRepository sInstance;
-    FavoriteRepository(Application application) {
+    private FavoriteRepository(Application application) {
         FavoriteDatabase db = FavoriteDatabase.getDatabase(application);
         mFavoriteDao = db.favoriteDao();
     }
@@ -30,8 +30,7 @@ public class FavoriteRepository {
         return mFavoriteDao.getFavoritesLimitOffset(limit,offset);
     }
     public Boolean isFavoirte(final Integer movieId) {
-        Boolean r = mFavoriteDao.isFavorite(movieId);
-        return r;
+        return  mFavoriteDao.isFavorite(movieId);
     }
 
     public void insert (Favorite favorite) {

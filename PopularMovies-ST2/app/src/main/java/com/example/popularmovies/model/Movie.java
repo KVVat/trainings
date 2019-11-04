@@ -7,6 +7,10 @@ import androidx.databinding.BaseObservable;
 
 public class Movie extends BaseObservable {
 
+    public Movie(String title,long id){
+        this.id = id;
+        this.title = title;
+    }
     public Movie(Favorite fav){
         this.id = fav.getMovieId().longValue();
         this.posterPath = fav.getPosterPath();
