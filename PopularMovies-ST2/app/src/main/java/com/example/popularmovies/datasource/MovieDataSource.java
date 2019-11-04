@@ -1,7 +1,5 @@
 package com.example.popularmovies.datasource;
 
-import android.util.Log;
-
 import com.example.popularmovies.api.FavoriteRepository;
 import com.example.popularmovies.api.MoviesDbRepository;
 import com.example.popularmovies.constants.MovieSortMode;
@@ -24,64 +22,71 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
 
     private MovieSortMode mSortMode=MovieSortMode.SORT_MODE_POPULAR;//"top_rated";
 
+    /**
+     * helper for favoirte
+     * @param offset
+     * @return
+     */
+    private List<Movie> favoriteToMovieList(Integer offset){
+        List<Favorite> fabs = FavoriteRepository.getInstance().getFavoriteLimitOffset(PAGE_SIZE,offset);
+        if(fabs != null){
+            List<Movie> lm = new ArrayList<>();
+            for(Favorite fab:fabs){
+                Movie mv = new Movie(fab);
+                lm.add(mv);
+            }
+            return lm;
+        }
+        return new ArrayList<>();
+    }
+
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull final LoadInitialCallback<Integer, Movie> callback) {
-        //Log.i("Observe",mSortMode);
-
         if(mSortMode == MovieSortMode.SORT_MODE_POPULAR || mSortMode == MovieSortMode.SORT_MODE_TOPRATED) {
             MoviesDbRepository.getInstance().getMoviesByPageCb(new Callback<ResultMovies>() {
                 @Override
                 public void onResponse(Call<ResultMovies> call, Response<ResultMovies> response) {
-
                     if (response != null && response.body() != null) {
                         List<Movie> lm = response.body().getMovies();
                         callback.onResult(lm, null, FIRST_PAGE + 1);
                     }
                 }
-
                 @Override
-                public void onFailure(Call<ResultMovies> call, Throwable t) {
-
-                }
+                public void onFailure(Call<ResultMovies> call, Throwable t) { }
             }, mSortMode.getKey(), FIRST_PAGE);
         } else if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
-            List<Favorite> fabs =
-                FavoriteRepository.getInstance().getFavoriteLimitOffset(PAGE_SIZE,0);
-            Log.i("Observe",fabs.toString());
-            if(fabs != null){
-                List<Movie> lm = new ArrayList<>();
-                for(Favorite fab:fabs){
-                    Movie mv = new Movie(fab);
-                    Log.i("Observe",mv.getPosterPath()+","+mv.getId()+","+mv.getTitle());
-                    lm.add(mv);
-                }
-                Log.i("Observe",lm.toString());
-                callback.onResult(lm, null, FIRST_PAGE + 1);
-            }
+
+            List<Movie> lm = favoriteToMovieList(0);
+            callback.onResult(lm, null, FIRST_PAGE + 1);
         }
     }
 
     @Override
     public void loadBefore(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer, Movie> callback) {
+
         Integer adjacentKey = (params.key > 1) ? params.key - 1 : null;
 
-        MoviesDbRepository.getInstance().getMoviesByPageCb(new Callback<ResultMovies>() {
-            @Override
-            public void onResponse(Call<ResultMovies> call, Response<ResultMovies> response) {
-                if(response != null && response.body()!=null){
-                    callback.onResult(response.body().getMovies(),adjacentKey);
+        if(mSortMode == MovieSortMode.SORT_MODE_POPULAR || mSortMode == MovieSortMode.SORT_MODE_TOPRATED) {
+            MoviesDbRepository.getInstance().getMoviesByPageCb(new Callback<ResultMovies>() {
+                @Override
+                public void onResponse(Call<ResultMovies> call, Response<ResultMovies> response) {
+                    if (response != null && response.body() != null) {
+                        List<Movie> lm = response.body().getMovies();
+                        callback.onResult(lm, adjacentKey);
+                    }
                 }
-            }
-            @Override
-            public void onFailure(Call<ResultMovies> call, Throwable t) {
-
-            }
-        },mSortMode.getKey(), params.key);
+                @Override
+                public void onFailure(Call<ResultMovies> call, Throwable t) { }
+            }, mSortMode.getKey(), params.key);
+        } else if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
+            List<Movie> lm = favoriteToMovieList(params.key*PAGE_SIZE);
+            callback.onResult(lm, adjacentKey);
+        }
     }
 
     @Override
     public void loadAfter(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer, Movie> callback) {
-        Log.i("Observe","loadAfter");
+
         if(mSortMode == MovieSortMode.SORT_MODE_POPULAR || mSortMode == MovieSortMode.SORT_MODE_TOPRATED) {
 
             MoviesDbRepository.getInstance().getMoviesByPageCb(new Callback<ResultMovies>() {
@@ -100,19 +105,9 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
                 }
             }, mSortMode.getKey(), params.key);
         } else if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
-            List<Favorite> fabs =
-                    FavoriteRepository.getInstance().getFavoriteLimitOffset(PAGE_SIZE,params.key*PAGE_SIZE);
-            Log.i("Observe",fabs.toString());
-            if(fabs != null){
-                List<Movie> lm = new ArrayList<>();
-                for(Favorite fab:fabs){
-                    lm.add(new Movie(fab));
-                }
-                Log.i("Observe",lm.toString());
-                Integer key = lm.size() > 0 ? params.key + 1 : null;
-                callback.onResult(lm, key);
-            }
-
+            List<Movie> lm = favoriteToMovieList(params.key*PAGE_SIZE);
+            Integer key = lm.size() > 0 ? params.key + 1 : null;
+            callback.onResult(lm, key);
         }
     }
 

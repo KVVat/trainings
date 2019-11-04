@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
         //MovieSortMode.SORT_MODE_POPULAR;
         MovieDataSourceFactory.setSort(mSortMode);////sortKey(mSortMode));
 
-        /*Intent intent = new Intent(this,DetailActivity.class);
+        Intent intent = new Intent(this,DetailActivity.class);
         intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,24L);
         startActivity(intent);
-        */
+
 
         setupBindings(savedInstanceState);
 

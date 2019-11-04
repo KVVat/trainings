@@ -87,9 +87,7 @@ public class DetailActivity extends AppCompatActivity {
                 try {
                     this.startActivity(chooser);
                     //this.startActivity(appIntent);
-                } catch (ActivityNotFoundException ex) {
-
-                };
+                } catch (ActivityNotFoundException ex) { };
             });
         }
         mBinding.setModel(viewModel);
@@ -99,9 +97,11 @@ public class DetailActivity extends AppCompatActivity {
     private void updateDetail(){
         if(movieId != null && movieId !=0) {
 
-            final RecyclerView rv = findViewById(R.id.list_trailers);
-            rv.setAdapter(viewModel.getTrailerAdapter());
-            rv.setNestedScrollingEnabled(true);
+            final RecyclerView rvt= findViewById(R.id.list_trailers);
+            rvt.setAdapter(viewModel.getTrailerAdapter());
+
+            final RecyclerView rvr = findViewById(R.id.list_reviews);
+            rvr.setAdapter(viewModel.getReviewsAdapter());
 
             viewModel.getDetail(movieId).observe(this,detail -> {
                 mBinding.setDetail(detail);

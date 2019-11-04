@@ -233,7 +233,7 @@ public class Detail {
         this.voteAverage = voteAverage;
     }
 
-    /* For Data Transfer*/
+    /* Exclude : For Data Transfer*/
     Trailers trailers;
 
     public Trailers getTrailers() {
@@ -242,5 +242,15 @@ public class Detail {
 
     public void setTrailers(Trailers trailers) {
         this.trailers = trailers;
+    }
+
+    Reviews reviews;
+
+    public Reviews getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Reviews reviews) {
+        this.reviews = reviews;
     }
 }

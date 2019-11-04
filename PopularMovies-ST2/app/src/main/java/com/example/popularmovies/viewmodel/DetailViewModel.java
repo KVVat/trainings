@@ -5,12 +5,13 @@ import android.view.View;
 
 import com.example.popularmovies.BuildConfig;
 import com.example.popularmovies.R;
+import com.example.popularmovies.apdater.ReviewsAdapter;
 import com.example.popularmovies.apdater.TrailerAdapter;
 import com.example.popularmovies.api.FavoriteRepository;
 import com.example.popularmovies.api.MoviesDbRepository;
 import com.example.popularmovies.constants.Constants;
 import com.example.popularmovies.model.Detail;
-import com.example.popularmovies.model.Trailer;
+import com.example.popularmovies.model.Reviews;
 import com.example.popularmovies.model.Trailers;
 
 import java.util.ArrayList;
@@ -36,36 +37,29 @@ public class DetailViewModel extends ViewModel {
 
     public MutableLiveData<Detail> mutableDetail = new MutableLiveData<>();
     private TrailerAdapter trailerAdapter;
+    private ReviewsAdapter reviewsAdapter;
+
     public void init() {
         trailerAdapter = new TrailerAdapter(R.layout.trailer_row,this);
-
-        //favoriteRepository = FavoriteRepository.getInstance();
+        reviewsAdapter = new ReviewsAdapter(R.layout.review_row,this);
     }
     public TrailerAdapter getTrailerAdapter() {
         return trailerAdapter;
     }
+    public ReviewsAdapter getReviewsAdapter() {
+        return reviewsAdapter;
+    }
 
     public ObservableBoolean getIsFavorite(Integer movieId){
         Boolean b = FavoriteRepository.getInstance().isFavoirte(movieId);
-        isFavorite.set(false);
-        Log.i("Observe","get"+b);
-        if(b  != null)
+        if(b != null) {
             isFavorite.set(b);
-
+        } else {
+            isFavorite.set(false);
+        }
         return isFavorite;
     }
 
-
-    public Trailer getTrailerAt(int pos){
-        if(mutableDetail != null) {
-            Trailers trailers = mutableDetail.getValue().getTrailers();
-            List<Trailer> lists = trailers.getResults();
-            if(lists.size() != 0 && lists.size()+1>pos){
-                return lists.get(pos);
-            }
-        }
-        return null;
-    }
     public MutableLiveData<Detail> getDetail(Long movie_id) {
         Log.i("Observe","getDetail Starts");
         List<Observable<?>> rq = new ArrayList<>();
@@ -74,15 +68,21 @@ public class DetailViewModel extends ViewModel {
                 id, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE,""));
         rq.add(MoviesDbRepository.getInstance().getApi().getTrailers(
                 id, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE));
-
+        rq.add(MoviesDbRepository.getInstance().getApi().getReviews(
+                id,BuildConfig.TMDbAPIKEY,Constants.LANGUAGE,1));
         Observable.zip(
             rq,new Function<Object[], Object>() {
             @Override
             public Object apply(Object[] objects) throws Exception {
+                Log.i("Observe","getDetail apply");
                 Detail detail = new Detail();
+
                 if(objects.length>=2){
                     detail = (Detail)objects[0];
                     detail.setTrailers((Trailers)objects[1]);
+                }
+                if(objects.length>=3){
+                    detail.setReviews((Reviews)objects[2]);
                 }
                 return (Object)detail;
             }})
@@ -91,7 +91,6 @@ public class DetailViewModel extends ViewModel {
                   new Consumer<Object>(){
                       @Override
                       public void accept(Object o) throws Exception {
-                          Log.i("Observe","rx:success"+o.toString());
                           mutableDetail.setValue((Detail)o);
                           errorLayout.set(View.GONE);
                           mainLayout.set(View.VISIBLE);
@@ -99,7 +98,8 @@ public class DetailViewModel extends ViewModel {
                   },new Consumer<Object>(){
                         @Override
                         public void accept(Object o) throws Exception {
-                            Log.i("Observe","rx:error:"+o.toString());
+                            Log.i("Observe","getDetail error"+o.toString());
+
                             errorLayout.set(View.VISIBLE);
                             mainLayout.set(View.GONE);
                             mutableDetail.setValue(new Detail());

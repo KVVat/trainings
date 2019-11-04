@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.popularmovies.BR;
 import com.example.popularmovies.R;
-import com.example.popularmovies.model.Trailer;
+import com.example.popularmovies.model.Review;
 import com.example.popularmovies.viewmodel.DetailViewModel;
 
 import androidx.annotation.LayoutRes;
@@ -16,11 +16,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.GenericViewHolder> {
+public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.GenericViewHolder> {
     private int layoutId;
     private DetailViewModel viewModel;
-    public TrailerAdapter(@LayoutRes int layoutId, DetailViewModel viewModel) {
-        Log.i("Observer","TrailerAdapter const");
+    public ReviewsAdapter(@LayoutRes int layoutId, DetailViewModel viewModel) {
+        Log.i("Observer","ReviewsAdapter const");
         this.layoutId = layoutId;
         this.viewModel = viewModel;
     }
@@ -28,7 +28,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.GenericV
     public int getItemCount() {
         if(this.viewModel!= null){
             return
-                this.viewModel.mutableDetail.getValue().getTrailers().getResults().size();
+                this.viewModel.mutableDetail.getValue().getReviews().getResults().size();
         } else {
             return 0;
         }
@@ -54,9 +54,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.GenericV
     @Override
     public void onBindViewHolder(@NonNull GenericViewHolder holder, int position) {
         holder.bind(viewModel, position);
-        holder.rootView.setOnClickListener(view->{
-            if(listener != null) listener.onClick(view);
-        });
+        //holder.rootView.setOnClickListener(view->{ listener.onClick(view); });
     }
 
     private int getLayoutIdForPosition(int position) {
@@ -81,12 +79,13 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.GenericV
             //viewModel.fetchMovieImagesAt(position);
 
             binding.setVariable(BR.viewModel, viewModel);
-            binding.setVariable(BR.posTrailer, position);
+            binding.setVariable(BR.posReview, position);
 
-            Trailer trailer= viewModel.mutableDetail.getValue().getTrailers().getResults().get(position);
-            rootView.setTag(R.string.trailer_url,trailer.getKey());
+            Review review=
+                    viewModel.mutableDetail.getValue().getReviews().getResults().get(position);
+            rootView.setTag(R.string.trailer_url,review.getUrl());
 
-            binding.setVariable(BR.trailer,trailer);
+            binding.setVariable(BR.review,review);
             binding.executePendingBindings();
         }
 

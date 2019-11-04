@@ -44,24 +44,9 @@ public class MoviesDbRepository {
         return this.api;
     }
 
-    /**
-     * getDetail As MutableLiveData
-     */
-    /*
-    public void getDetail(Callback<Detail> callback,String id){
-
-        api.getDetail(id, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE,"")
-                .enqueue(callback);
-
-        return;
-    }*/
-
     public void getMoviesByPageCb(Callback<ResultMovies> callback,String sort, int page){
         api.getMovies(sort, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE, page).enqueue(callback);
     }
 
-    /*
-    public void getTrailers(Callback<Trailers> callback, String id){
-        api.getTrailers(id, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE).enqueue(callback);
-    }*/
+
 }

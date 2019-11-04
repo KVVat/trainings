@@ -2,6 +2,7 @@ package com.example.popularmovies.interfaces;
 
 import com.example.popularmovies.model.Detail;
 import com.example.popularmovies.model.ResultMovies;
+import com.example.popularmovies.model.Reviews;
 import com.example.popularmovies.model.Trailers;
 
 import io.reactivex.Observable;
@@ -27,5 +28,11 @@ public interface TMDbInterface {
     Observable<Trailers> getTrailers(@Path("movie_id") String id,
                                @Query("api_key") String apiKey,
                                @Query("append_to_response") String appendToResponse
+    );
+    @GET("movie/{movie_id}/reviews")
+    Observable<Reviews> getReviews(@Path("movie_id") String id,
+                                    @Query("api_key") String apiKey,
+                                    @Query("language") String language,
+                                    @Query("page") int page
     );
 }
