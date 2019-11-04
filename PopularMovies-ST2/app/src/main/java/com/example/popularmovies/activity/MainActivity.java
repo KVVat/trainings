@@ -75,8 +75,10 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
             if(SharedPreferenceUtil.getInstance(this).getFavoriteDirty()){
-                viewModel.moviePagedList.getValue().getDataSource().invalidate();
-                SharedPreferenceUtil.getInstance(this).setFavoriteDirty(false);
+                if(viewModel.moviePagedList.getValue() != null ) {
+                    viewModel.moviePagedList.getValue().getDataSource().invalidate();
+                    SharedPreferenceUtil.getInstance(this).setFavoriteDirty(false);
+                }
             }
         }
     }

@@ -25,7 +25,9 @@ public class FavoriteRepository {
         }
         return sInstance;
     }
-
+    public Integer getFavoriteCount(){
+        return mFavoriteDao.getFavoriteCount();
+    }
     public List<Favorite> getFavoriteLimitOffset(int limit,int offset){
         return mFavoriteDao.getFavoritesLimitOffset(limit,offset);
     }

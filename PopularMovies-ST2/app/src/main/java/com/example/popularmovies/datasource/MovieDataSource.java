@@ -1,11 +1,11 @@
 package com.example.popularmovies.datasource;
 
-import com.example.popularmovies.persistence.FavoriteRepository;
 import com.example.popularmovies.api.MoviesDbRepository;
 import com.example.popularmovies.constants.MovieSortMode;
 import com.example.popularmovies.model.Favorite;
 import com.example.popularmovies.model.Movie;
 import com.example.popularmovies.model.ResultMovies;
+import com.example.popularmovies.persistence.FavoriteRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
         } else if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
 
             List<Movie> lm = favoriteToMovieList(0);
-            callback.onResult(lm, null, FIRST_PAGE + 1);
+            callback.onResult(lm, null, 1);
         }
     }
 
@@ -86,7 +86,7 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
 
     @Override
     public void loadAfter(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer, Movie> callback) {
-
+        //Log.i("Observe","loadAfter");
         if(mSortMode == MovieSortMode.SORT_MODE_POPULAR || mSortMode == MovieSortMode.SORT_MODE_TOPRATED) {
 
             MoviesDbRepository.getInstance().getMoviesByPageCb(new Callback<ResultMovies>() {
@@ -105,8 +105,14 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
                 }
             }, mSortMode.getKey(), params.key);
         } else if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
+
             List<Movie> lm = favoriteToMovieList(params.key*PAGE_SIZE);
-            Integer key = lm.size() > 0 ? params.key + 1 : null;
+
+            int total = FavoriteRepository.getInstance().getFavoriteCount();
+            Integer key = null;
+            if(params.key*PAGE_SIZE < total){
+                key = params.key+1;
+            }
             callback.onResult(lm, key);
         }
     }
