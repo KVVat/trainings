@@ -26,7 +26,7 @@ public class Detail {
     List<ProductionCountry> productionCountries;
     @SerializedName("release_date")
     String releaseDate;
-    Integer revenue;
+    Long revenue;
     Integer runtime;
     List<SpokenLaunguage> spokenLanguages;
     String status;
@@ -152,11 +152,11 @@ public class Detail {
         this.releaseDate = releaseDate;
     }
 
-    public Integer getRevenue() {
+    public Long getRevenue() {
         return revenue;
     }
 
-    public void setRevenue(Integer revenue) {
+    public void setRevenue(Long revenue) {
         this.revenue = revenue;
     }
 

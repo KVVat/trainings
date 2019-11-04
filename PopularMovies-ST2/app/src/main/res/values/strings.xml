@@ -15,5 +15,8 @@
     <string name="card_movie_id">movie_id</string>
     <string name="trailer_url">trailer_url</string>
     <string name="favorites">Favorites</string>
+    <string name="force_chrome">Force Chrome to open trailers</string>
+    <string name="trailers">Trailers</string>
+    <string name="reviews">Reviews</string>
 
 </resources>

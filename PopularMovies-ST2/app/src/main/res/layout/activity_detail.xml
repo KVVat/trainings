@@ -81,6 +81,7 @@
                 android:id="@+id/detailPosterView"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
+                android:minHeight="200dp"
                 android:layout_below="@+id/detailOriginalTitle"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
@@ -110,9 +111,8 @@
                 android:text="@{detail.releaseDate}"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
             <TextView
-                android:id="@+id/detailUserRating"
+                android:id="@+id/detailPlayingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detailReleaseDate"
@@ -124,7 +124,22 @@
                 android:layout_marginBottom="4dp"
                 android:layout_toEndOf="@+id/detailPosterView"
                 android:layout_toRightOf="@+id/detailPosterView"
-                android:maxHeight="280dp"
+                android:text="@{Integer.toString(detail.runtime)+`min`}"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/detailUserRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detailPlayingTime"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:layout_toEndOf="@+id/detailPosterView"
+                android:layout_toRightOf="@+id/detailPosterView"
                 android:text="@{Double.toString(detail.voteAverage)+`/10.0`}"
                 android:textSize="18sp"
                 android:textStyle="bold" />

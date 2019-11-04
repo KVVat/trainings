@@ -1,4 +1,4 @@
-package com.example.popularmovies.dao;
+package com.example.popularmovies.persistence;
 
 import com.example.popularmovies.model.Favorite;
 

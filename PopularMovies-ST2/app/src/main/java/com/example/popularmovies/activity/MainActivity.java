@@ -3,7 +3,6 @@ package com.example.popularmovies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,28 +28,30 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
     private MovieSortMode mSortMode;
-    private RecyclerView mRecyclerView;
-    private Parcelable listState;
+    //private RecyclerView mRecyclerView;
+    //private Parcelable listState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = findViewById(R.id.list_movies);
-        Log.i("Observe","saveState:"+savedInstanceState);
+        //mRecyclerView = findViewById(R.id.list_movies);
+        //Log.i("Observe","saveState:"+savedInstanceState);
         if(savedInstanceState != null) {
-            listState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_STATE);
+            //listState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_STATE);
         }
         mSortMode = MovieSortMode.valueOf(
                 SharedPreferenceUtil.getInstance(this).getSortMode());
-        //MovieSortMode.SORT_MODE_POPULAR;
-        MovieDataSourceFactory.setSort(mSortMode);////sortKey(mSortMode));
 
+
+        MovieDataSourceFactory.setSort(mSortMode);////sortKey(mSortMode));
+/*
         Intent intent = new Intent(this,DetailActivity.class);
         intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,24L);
         startActivity(intent);
-
+*/
 
         setupBindings(savedInstanceState);
 
@@ -69,7 +70,16 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
+            if(SharedPreferenceUtil.getInstance(this).getFavoriteDirty()){
+                viewModel.moviePagedList.getValue().getDataSource().invalidate();
+                SharedPreferenceUtil.getInstance(this).setFavoriteDirty(false);
+            }
+        }
+    }
     private void setupBindings(Bundle savedInstanceState) {
         ActivityMainBinding activityBinding =
                 DataBindingUtil.setContentView(this,R.layout.activity_main);
@@ -78,15 +88,17 @@ public class MainActivity extends AppCompatActivity {
             viewModel.init(this);
             viewModel.getAdapter().setOnItemClickListener(view->{
                 Long id = (Long)view.getTag(R.string.card_movie_id);
+                Log.i("Observe","ActivityStart"+id);
                 Intent intent = new Intent(MainActivity.this,DetailActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,id);
-                startActivity(intent);
+                startActivityForResult(intent,Constants.DETAIL_RESPONSE_CODE);
             });
         }
         activityBinding.setViewModel(viewModel);
         setupListUpdate();
     }
+
 
     private void setupListUpdate() {
 
@@ -101,14 +113,15 @@ public class MainActivity extends AppCompatActivity {
             viewModel.loading.set(View.GONE);
             if(viewModel.getAdapter()!=null) {
                 viewModel.getAdapter().submitList(items);
-                if (!NetworkUtil.isOnline()) {
+                if (!NetworkUtil.isOnline() && mSortMode !=MovieSortMode.SORT_MODE_FAVORITE) {
                     viewModel.showEmpty.set(View.VISIBLE);
                 } else {
                     viewModel.showEmpty.set(View.GONE);
                 }
-                mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
+                //mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
             }
         });
+
     }
 
     @Override
@@ -170,16 +183,10 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
     public void setupMenuTitle(MovieSortMode sortMode){
         //ActionBar toolbar = getSupportActionBar();
         getSupportActionBar().setTitle(sortMode.getTitleRes());
     }
-
 
     private static final String BUNDLE_RECYCLER_STATE = "popularmoview.recycler.state";
 
@@ -192,9 +199,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         //Log.i("Observe","saveState called");
-        outState.putParcelable(BUNDLE_RECYCLER_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
+        //outState.putParcelable(BUNDLE_RECYCLER_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
         super.onSaveInstanceState(outState);
-        //outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
-
     }
 }

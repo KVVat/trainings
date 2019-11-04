@@ -3,6 +3,7 @@ package com.example.popularmovies.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +12,12 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 
 import com.example.popularmovies.R;
-import com.example.popularmovies.api.FavoriteRepository;
 import com.example.popularmovies.constants.Constants;
 import com.example.popularmovies.databinding.ActivityDetailBinding;
 import com.example.popularmovies.model.Detail;
 import com.example.popularmovies.model.Favorite;
+import com.example.popularmovies.persistence.FavoriteRepository;
+import com.example.popularmovies.utils.SharedPreferenceUtil;
 import com.example.popularmovies.viewmodel.DetailViewModel;
 
 import androidx.appcompat.app.ActionBar;
@@ -30,12 +32,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class DetailActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-
     DetailViewModel viewModel;
-
     private ActivityDetailBinding mBinding;
-
     private Long movieId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +44,8 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         movieId = intent.getLongExtra(Constants.INTENT_EXTRA_MOVIE_ID,0);
-
         setupBindings(savedInstanceState);
-
-
+        Log.i("Observe","onCreate Detail:"+movieId);
         //Repair Checkbox Status Here//
 
         CheckBox checkBox = findViewById(R.id.checkFavorite);
@@ -57,12 +55,11 @@ public class DetailActivity extends AppCompatActivity {
             if(chk.isChecked()){
                 FavoriteRepository.getInstance().insert(new Favorite(
                         movieId.intValue(),true,detail.getTitle(),detail.getPosterPath()));
-                //Write Like To Database
             } else {
                 FavoriteRepository.getInstance().insert(new Favorite(
                         movieId.intValue(),false, detail.getTitle(),detail.getPosterPath()));
-                //Safedelete Like To Database
             }
+            SharedPreferenceUtil.getInstance(this).setFavoriteDirty(true);
         });
 
         mToolbar = findViewById(R.id.toolbar_detail);
@@ -77,18 +74,18 @@ public class DetailActivity extends AppCompatActivity {
                 DataBindingUtil.setContentView(this,R.layout.activity_detail);
         viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
         if(savedInstanceState == null){
-            viewModel.init();
+            viewModel.init(this);
             viewModel.getTrailerAdapter().setOnItemClickListener(view->{
                 String site = (String)view.getTag(R.string.trailer_url);
-                //Log.i("Observe",site);
                 Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.youtube.com/watch?v=" + site));
-                Intent chooser = Intent.createChooser(webIntent,"Chooser Application");
-                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + site));
-
+                        Uri.parse("https://www.youtube.com/watch?v="+site));
+                if(viewModel.isForceChrome.get()) {
+                    webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    webIntent.setPackage("com.android.chrome");
+                }
+                Intent chooser = Intent.createChooser(webIntent,"Open url from");
                 try {
                     this.startActivity(chooser);
-                    //this.startActivity(appIntent);
                 } catch (ActivityNotFoundException ex) { };
             });
         }
@@ -118,24 +115,37 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setContentView(R.layout.activity_detail);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i("OPTION","onCreateOption menu called.");
+
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
     }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Log.d("OPTION","PREPARE");
-        return super.onPrepareOptionsMenu(menu);
+
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_force_chrome).setChecked(viewModel.isForceChrome.get());
+        return true;
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Log.d("OPTION","SELECTED");
+
         switch (id){
             case R.id.action_reload_detail:
                 if(movieId==null) movieId=24L;
                 updateDetail();
+                break;
+            case R.id.action_force_chrome:
+                viewModel.toggleForceChrome();
+                SharedPreferenceUtil.getInstance(this).setForceChorme(
+                        viewModel.isForceChrome.get());
                 break;
         }
 

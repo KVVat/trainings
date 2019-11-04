@@ -1,10 +1,9 @@
-package com.example.popularmovies.api;
+package com.example.popularmovies.persistence;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import com.example.popularmovies.applilcation.ApplicationContext;
-import com.example.popularmovies.dao.FavoriteDao;
 import com.example.popularmovies.model.Favorite;
 
 import java.util.List;

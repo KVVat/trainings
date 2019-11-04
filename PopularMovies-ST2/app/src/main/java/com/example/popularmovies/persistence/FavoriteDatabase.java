@@ -1,8 +1,7 @@
-package com.example.popularmovies.api;
+package com.example.popularmovies.persistence;
 
 import android.content.Context;
 
-import com.example.popularmovies.dao.FavoriteDao;
 import com.example.popularmovies.model.Favorite;
 
 import androidx.room.Database;

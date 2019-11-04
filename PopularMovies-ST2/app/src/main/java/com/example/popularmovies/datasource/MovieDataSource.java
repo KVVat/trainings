@@ -1,6 +1,6 @@
 package com.example.popularmovies.datasource;
 
-import com.example.popularmovies.api.FavoriteRepository;
+import com.example.popularmovies.persistence.FavoriteRepository;
 import com.example.popularmovies.api.MoviesDbRepository;
 import com.example.popularmovies.constants.MovieSortMode;
 import com.example.popularmovies.model.Favorite;

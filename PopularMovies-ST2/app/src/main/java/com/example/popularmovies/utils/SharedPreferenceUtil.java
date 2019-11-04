@@ -29,4 +29,26 @@ public class SharedPreferenceUtil {
     public int getSortMode(){
         return mSharedPref.getInt("SortMode",0);
     }
+
+    public void setForceChorme(Boolean mode){
+        SharedPreferences.Editor editor = mSharedPref.edit();
+        editor.putBoolean("ForceChrome", mode);
+        editor.commit();
+    }
+
+    public Boolean getForceChrome(){
+        return mSharedPref.getBoolean("ForceChrome",false);
+    }
+
+    public void setFavoriteDirty(Boolean mode){
+        SharedPreferences.Editor editor = mSharedPref.edit();
+        editor.putBoolean("FavoriteDirty", mode);
+        editor.commit();
+    }
+
+    public Boolean getFavoriteDirty(){
+        return mSharedPref.getBoolean("FavoriteDirty",
+                false);
+    }
 }
+

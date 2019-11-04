@@ -1,6 +1,5 @@
 package com.example.popularmovies.apdater;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +15,24 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.GenericViewHolder> {
+public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int layoutId;
     private DetailViewModel viewModel;
+
+    private int layoutHeaderId=R.layout.trailer_header;
+
     public TrailerAdapter(@LayoutRes int layoutId, DetailViewModel viewModel) {
-        Log.i("Observer","TrailerAdapter const");
         this.layoutId = layoutId;
         this.viewModel = viewModel;
     }
     @Override
     public int getItemCount() {
         if(this.viewModel!= null){
-            return
-                this.viewModel.mutableDetail.getValue().getTrailers().getResults().size();
+            int size = this.viewModel.mutableDetail.getValue().getTrailers().getResults().size();
+            if(size == 0)
+                return 0;
+            else
+                return size+1;
         } else {
             return 0;
         }
@@ -42,29 +46,48 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.GenericV
 
     @NonNull
     @Override
-    public GenericViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Log.i("Observer","OnCreate Viwe Holder"+viewType);
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        ViewDataBinding binding = DataBindingUtil.inflate
-                (layoutInflater, viewType, parent, false);
 
-        return new GenericViewHolder(binding);
+        if(viewType == this.layoutId) {
+            ViewDataBinding binding = DataBindingUtil.inflate
+                    (layoutInflater, viewType, parent, false);
+            return new GenericViewHolder(binding);
+        } else {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(viewType, parent, false);
+            return new HeaderViewHolder(view);
+
+            //layoutInflater.inflate(parent.getContext());
+            //return new HeaderViewHolder(parent.getRootView());
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GenericViewHolder holder, int position) {
-        holder.bind(viewModel, position);
-        holder.rootView.setOnClickListener(view->{
-            if(listener != null) listener.onClick(view);
-        });
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if(position >0) {
+            GenericViewHolder gh = (GenericViewHolder)holder;
+            gh.bind(viewModel, position - 1);
+            gh.rootView.setOnClickListener(view -> {
+                if (listener != null) listener.onClick(view);
+            });
+        }
     }
 
     private int getLayoutIdForPosition(int position) {
-        return layoutId;
+        if (position==0) return this.layoutHeaderId;
+        else return this.layoutId;
     }
     @Override
     public int getItemViewType(int position) {
         return getLayoutIdForPosition(position);
+    }
+
+    class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public HeaderViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
     }
 
     class GenericViewHolder extends RecyclerView.ViewHolder {
@@ -77,8 +100,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.GenericV
         }
 
         void bind(DetailViewModel viewModel, int position) {
-
-            //viewModel.fetchMovieImagesAt(position);
 
             binding.setVariable(BR.viewModel, viewModel);
             binding.setVariable(BR.posTrailer, position);
