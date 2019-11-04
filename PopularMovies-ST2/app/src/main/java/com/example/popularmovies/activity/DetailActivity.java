@@ -23,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class DetailActivity extends AppCompatActivity {
@@ -99,6 +101,11 @@ public class DetailActivity extends AppCompatActivity {
 
             final RecyclerView rvt= findViewById(R.id.list_trailers);
             rvt.setAdapter(viewModel.getTrailerAdapter());
+            //Append Divider To Trailer View
+            DividerItemDecoration dividerItemDecoration =
+                    new DividerItemDecoration(rvt.getContext(),
+                    new LinearLayoutManager(this).getOrientation());
+            rvt.addItemDecoration(dividerItemDecoration);
 
             final RecyclerView rvr = findViewById(R.id.list_reviews);
             rvr.setAdapter(viewModel.getReviewsAdapter());

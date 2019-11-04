@@ -22,7 +22,12 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -50,18 +55,30 @@ public class DetailViewModel extends ViewModel {
         return reviewsAdapter;
     }
 
-    public ObservableBoolean getIsFavorite(Integer movieId){
-        Boolean b = FavoriteRepository.getInstance().isFavoirte(movieId);
-        if(b != null) {
-            isFavorite.set(b);
-        } else {
-            isFavorite.set(false);
-        }
-        return isFavorite;
+    public void getIsFavorite(Integer movieId){
+        //User RxJava2 to implement query.
+        Single.create(new SingleOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(SingleEmitter<Boolean> emitter) throws Exception {
+                Boolean b = FavoriteRepository.getInstance().isFavoirte(movieId);
+                emitter.onSuccess(b);
+            }
+        }).subscribeOn(Schedulers.io()).subscribe(new SingleObserver<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) { }
+            @Override
+            public void onSuccess(Boolean aBoolean) {
+                isFavorite.set((Boolean)aBoolean);
+            }
+            @Override
+            public void onError(Throwable e) {
+                Log.i("Observe","error in fav:"+e.toString());
+            }
+        });
     }
 
     public MutableLiveData<Detail> getDetail(Long movie_id) {
-        Log.i("Observe","getDetail Starts");
+
         List<Observable<?>> rq = new ArrayList<>();
         String id = movie_id.toString();
         rq.add(MoviesDbRepository.getInstance().getApi().getDetail(
@@ -74,9 +91,7 @@ public class DetailViewModel extends ViewModel {
             rq,new Function<Object[], Object>() {
             @Override
             public Object apply(Object[] objects) throws Exception {
-                Log.i("Observe","getDetail apply");
                 Detail detail = new Detail();
-
                 if(objects.length>=2){
                     detail = (Detail)objects[0];
                     detail.setTrailers((Trailers)objects[1]);
@@ -98,8 +113,6 @@ public class DetailViewModel extends ViewModel {
                   },new Consumer<Object>(){
                         @Override
                         public void accept(Object o) throws Exception {
-                            Log.i("Observe","getDetail error"+o.toString());
-
                             errorLayout.set(View.VISIBLE);
                             mainLayout.set(View.GONE);
                             mutableDetail.setValue(new Detail());

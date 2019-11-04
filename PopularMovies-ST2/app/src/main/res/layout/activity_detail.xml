@@ -72,24 +72,24 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="2dp"
                 android:text="@{detail.originalTitle}"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/detailPosterView"
-                android:layout_width="160dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detailOriginalTitle"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:adjustViewBounds="true"
-                android:maxWidth="160dp"
+                android:maxWidth="140dp"
                 bind:imageUrl="@{detail.posterPath}"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -103,7 +103,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="4dp"
                 android:layout_toEndOf="@+id/detailPosterView"
                 android:layout_toRightOf="@+id/detailPosterView"
                 android:maxHeight="280dp"
@@ -121,7 +121,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="4dp"
                 android:layout_toEndOf="@+id/detailPosterView"
                 android:layout_toRightOf="@+id/detailPosterView"
                 android:maxHeight="280dp"
@@ -168,6 +168,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
+
                 android:layout_below="@id/detailOverview"
                 app:spanCount="1" />
 
