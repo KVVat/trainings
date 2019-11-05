@@ -38,7 +38,8 @@ public class DetailViewModel extends ViewModel {
 
     private String TAG="DetailViewModel";
 
-    public ObservableInt errorLayout= new ObservableInt(View.GONE);
+    public ObservableInt loading = new ObservableInt(View.GONE);
+    public ObservableInt error= new ObservableInt(View.GONE);
     public ObservableInt mainLayout= new ObservableInt(View.GONE);
     public ObservableBoolean isFavorite = new ObservableBoolean();
     public ObservableBoolean isForceChrome = new ObservableBoolean();
@@ -97,6 +98,9 @@ public class DetailViewModel extends ViewModel {
         rq.add(MoviesDbRepository.getInstance().getApi().getReviews(
                 id,BuildConfig.TMDbAPIKEY,Constants.LANGUAGE,1));
 
+        loading.set(View.VISIBLE);
+        error.set(View.GONE);
+
         Observable.zip(
             rq,new Function<Object[], Object>() {
             @Override
@@ -109,21 +113,23 @@ public class DetailViewModel extends ViewModel {
                 if(objects.length>=3){
                     detail.setReviews((Reviews)objects[2]);
                 }
-                return (Object)detail;
+                return detail;
             }}).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<Object>() {
                     @Override
                     public void onNext(Object o) {
                         mutableDetail.setValue((Detail)o);
-                        errorLayout.set(View.GONE);
+                        error.set(View.GONE);
                         mainLayout.set(View.VISIBLE);
+                        loading.set(View.GONE);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.i("Observe","error in dt:"+e.toString()+","+e.getMessage());
-                        errorLayout.set(View.VISIBLE);
+                        error.set(View.VISIBLE);
                         mainLayout.set(View.GONE);
+                        loading.set(View.GONE);
                         mutableDetail.setValue(new Detail());
                     }
 

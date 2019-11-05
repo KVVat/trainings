@@ -36,6 +36,7 @@ public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding mBinding;
     private Long movieId;
     private Boolean favorite_dirty=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         movieId = intent.getLongExtra(Constants.INTENT_EXTRA_MOVIE_ID,0);
         setupBindings(savedInstanceState);
-        Log.i("Observe","onCreate Detail:"+movieId);
+
         //Repair Checkbox Status Here//
 
         CheckBox checkBox = findViewById(R.id.checkFavorite);
@@ -86,7 +87,7 @@ public class DetailActivity extends AppCompatActivity {
                 Intent chooser = Intent.createChooser(webIntent,"Open url from");
                 try {
                     this.startActivity(chooser);
-                } catch (ActivityNotFoundException ex) { };
+                } catch (ActivityNotFoundException ex) { }
             });
         }
         mBinding.setModel(viewModel);

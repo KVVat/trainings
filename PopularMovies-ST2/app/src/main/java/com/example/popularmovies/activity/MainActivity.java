@@ -29,8 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
     private MovieSortMode mSortMode;
-    //private RecyclerView mRecyclerView;
-    //private Parcelable listState;
+    /**Is favorite data updates from Detail activity? */
+    private Boolean isFavoriteDirty = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,24 +39,16 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        //mRecyclerView = findViewById(R.id.list_movies);
-        //Log.i("Observe","saveState:"+savedInstanceState);
-        if(savedInstanceState != null) {
-            //listState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_STATE);
-        }
         mSortMode = MovieSortMode.valueOf(
                 SharedPreferenceUtil.getInstance(this).getSortMode());
 
-
         MovieDataSourceFactory.setSort(mSortMode);////sortKey(mSortMode));
-/*
+
         Intent intent = new Intent(this,DetailActivity.class);
         intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,24L);
         startActivity(intent);
-*/
 
         setupBindings(savedInstanceState);
-
 
         /*
          * We need to place setup Toolbar in here
@@ -71,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -85,11 +79,12 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding activityBinding =
                 DataBindingUtil.setContentView(this,R.layout.activity_main);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
         if (savedInstanceState == null) {
             viewModel.init(this);
             viewModel.getAdapter().setOnItemClickListener(view->{
                 Long id = (Long)view.getTag(R.string.card_movie_id);
-                Log.i("Observe","ActivityStart"+id);
+
                 Intent intent = new Intent(MainActivity.this,DetailActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,id);
@@ -99,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         activityBinding.setViewModel(viewModel);
         setupListUpdate();
     }
-    Boolean isFavoriteDirty = false;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -121,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         rv.setNestedScrollingEnabled(true);
 
         viewModel.moviePagedList.observe(this,items->{
-            //Log.i("Observe","observe called"+viewModel.getAdapter().getItemCount());
+
             viewModel.loading.set(View.GONE);
             if(viewModel.getAdapter()!=null) {
                 viewModel.getAdapter().submitList(items);
@@ -200,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(sortMode.getTitleRes());
     }
 
-    private static final String BUNDLE_RECYCLER_STATE = "popularmoview.recycler.state";
+    //private static final String BUNDLE_RECYCLER_STATE = "popularmoview.recycler.state";
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
