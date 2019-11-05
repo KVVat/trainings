@@ -26,8 +26,6 @@
         <activity android:name=".activity.DetailActivity"
             android:parentActivityName=".activity.MainActivity"
             android:label="@string/detail_name"
-            android:launchMode="singleTop"
-            android:configChanges="orientation|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

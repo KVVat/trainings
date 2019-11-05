@@ -91,12 +91,9 @@ public class DetailViewModel extends ViewModel {
         //User RxJava2 to implement call three web api in a row.
         List<Observable<?>> rq = new ArrayList<>();
         String id = movie_id.toString();
-        rq.add(MoviesDbRepository.getInstance().getApi().getDetail(
-                id, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE,""));
-        rq.add(MoviesDbRepository.getInstance().getApi().getTrailers(
-                id, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE));
-        rq.add(MoviesDbRepository.getInstance().getApi().getReviews(
-                id,BuildConfig.TMDbAPIKEY,Constants.LANGUAGE,1));
+        rq.add(MoviesDbRepository.getInstance().getDetail(id));
+        rq.add(MoviesDbRepository.getInstance().getTrailers(id));
+        rq.add(MoviesDbRepository.getInstance().getReviews(id,1));
 
         loading.set(View.VISIBLE);
         error.set(View.GONE);

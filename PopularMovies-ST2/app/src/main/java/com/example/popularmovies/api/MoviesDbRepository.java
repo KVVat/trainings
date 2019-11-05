@@ -3,12 +3,19 @@ package com.example.popularmovies.api;
 import com.example.popularmovies.BuildConfig;
 import com.example.popularmovies.constants.Constants;
 import com.example.popularmovies.interfaces.TMDbInterface;
+import com.example.popularmovies.model.Detail;
 import com.example.popularmovies.model.ResultMovies;
+import com.example.popularmovies.model.Reviews;
+import com.example.popularmovies.model.Trailers;
 
+import io.reactivex.Observable;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  *
@@ -48,5 +55,16 @@ public class MoviesDbRepository {
         api.getMovies(sort, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE, page).enqueue(callback);
     }
 
+    public Observable<Detail> getDetail(String id){
+        return api.getDetail(id, BuildConfig.TMDbAPIKEY, Constants.LANGUAGE,"");
+    }
+
+    public Observable<Trailers> getTrailers(String id){
+        return api.getTrailers(id, BuildConfig.TMDbAPIKEY, "");
+    }
+
+    public Observable<Reviews> getReviews(String id,int page){
+        return api.getReviews(id,BuildConfig.TMDbAPIKEY,Constants.LANGUAGE,page);
+    }
 
 }
