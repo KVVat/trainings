@@ -71,6 +71,7 @@ public class DetailViewModel extends ViewModel {
             @Override
             public void subscribe(SingleEmitter<Boolean> emitter) throws Exception {
                 Boolean b = FavoriteRepository.getInstance().isFavoirte(movieId);
+                if(b == null) b=false;
                 emitter.onSuccess(b);
             }
         }).subscribeOn(Schedulers.io()).subscribe(new SingleObserver<Boolean>() {
@@ -78,11 +79,12 @@ public class DetailViewModel extends ViewModel {
             public void onSubscribe(Disposable d) { }
             @Override
             public void onSuccess(Boolean aBoolean) {
-                isFavorite.set((Boolean)aBoolean);
+
+                isFavorite.set(aBoolean);
             }
             @Override
             public void onError(Throwable e) {
-                Log.i("Observe","error in fav:"+e.toString());
+                //Log.i("Observe","error in fav:"+e.toString());
             }
         });
     }
