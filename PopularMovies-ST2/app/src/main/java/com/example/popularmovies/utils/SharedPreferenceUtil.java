@@ -40,6 +40,7 @@ public class SharedPreferenceUtil {
         return mSharedPref.getBoolean("ForceChrome",false);
     }
 
+    /*
     public void setFavoriteDirty(Boolean mode){
         SharedPreferences.Editor editor = mSharedPref.edit();
         editor.putBoolean("FavoriteDirty", mode);
@@ -49,6 +50,6 @@ public class SharedPreferenceUtil {
     public Boolean getFavoriteDirty(){
         return mSharedPref.getBoolean("FavoriteDirty",
                 false);
-    }
+    }*/
 }
 

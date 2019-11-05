@@ -35,7 +35,7 @@ public class DetailActivity extends AppCompatActivity {
     DetailViewModel viewModel;
     private ActivityDetailBinding mBinding;
     private Long movieId;
-
+    private Boolean favorite_dirty=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +59,7 @@ public class DetailActivity extends AppCompatActivity {
                 FavoriteRepository.getInstance().insert(new Favorite(
                         movieId.intValue(),false, detail.getTitle(),detail.getPosterPath()));
             }
-            SharedPreferenceUtil.getInstance(this).setFavoriteDirty(true);
+            favorite_dirty=true;//mark dirty for parent update.
         });
 
         mToolbar = findViewById(R.id.toolbar_detail);
@@ -91,6 +91,19 @@ public class DetailActivity extends AppCompatActivity {
         }
         mBinding.setModel(viewModel);
         updateDetail();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent is_dirty = new Intent();
+        is_dirty.putExtra("FAVORITE_IS_DIRTY", favorite_dirty);
+        setResult(RESULT_OK, is_dirty);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void updateDetail(){
@@ -138,6 +151,10 @@ public class DetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id){
+            case android.R.id.home:
+                onBackPressed();
+                finish();
+                break;
             case R.id.action_reload_detail:
                 if(movieId==null) movieId=24L;
                 updateDetail();

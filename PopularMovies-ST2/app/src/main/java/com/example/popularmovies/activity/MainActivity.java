@@ -1,6 +1,7 @@
 package com.example.popularmovies.activity;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,15 +74,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
-            if(SharedPreferenceUtil.getInstance(this).getFavoriteDirty()){
-                if(viewModel.moviePagedList.getValue() != null ) {
-                    viewModel.moviePagedList.getValue().getDataSource().invalidate();
-                    SharedPreferenceUtil.getInstance(this).setFavoriteDirty(false);
-                }
+        if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE && isFavoriteDirty){
+            if(viewModel.moviePagedList.getValue() != null ) {
+                viewModel.moviePagedList.getValue().getDataSource().invalidate();
             }
         }
     }
+
     private void setupBindings(Bundle savedInstanceState) {
         ActivityMainBinding activityBinding =
                 DataBindingUtil.setContentView(this,R.layout.activity_main);
@@ -100,7 +99,21 @@ public class MainActivity extends AppCompatActivity {
         activityBinding.setViewModel(viewModel);
         setupListUpdate();
     }
+    Boolean isFavoriteDirty = false;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("Observe", "" + isFavoriteDirty + "," + resultCode+","+requestCode);
+        switch (requestCode) {
+            case Constants.DETAIL_RESPONSE_CODE:
+                if (resultCode == Activity.RESULT_OK){
+                    isFavoriteDirty = data.getBooleanExtra("FAVORITE_IS_DIRTY", false);
+                    Log.i("Observe2", "" + isFavoriteDirty + "," + resultCode);
 
+                }
+                break;
+        }
+        super.onActivityResult(requestCode,resultCode,data);
+    }
 
     private void setupListUpdate() {
 
