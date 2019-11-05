@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
@@ -20,6 +19,7 @@ import com.example.popularmovies.persistence.FavoriteRepository;
 import com.example.popularmovies.utils.SharedPreferenceUtil;
 import com.example.popularmovies.viewmodel.DetailViewModel;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -107,6 +107,23 @@ public class DetailActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("detail",viewModel.mutableDetail.getValue());
+
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+        Detail detail = (savedInstanceState.getParcelable("detail"));
+        if(detail != null) viewModel.mutableDetail.setValue(detail);
+
+    }
+
     private void updateDetail(){
         if(movieId != null && movieId !=0) {
 
@@ -120,14 +137,22 @@ public class DetailActivity extends AppCompatActivity {
 
             final RecyclerView rvr = findViewById(R.id.list_reviews);
             rvr.setAdapter(viewModel.getReviewsAdapter());
-
-            viewModel.getDetail(movieId).observe(this,detail -> {
-                mBinding.setDetail(detail);
+            //We don't need to reload data from api when the state is saved
+            if(viewModel.mutableDetail.getValue()==null) {
+                viewModel.getDetail(movieId).observe(this, detail -> {
+                    mBinding.setDetail(detail);
+                    mBinding.setLifecycleOwner(this);
+                });
+            } else {
+                mBinding.setDetail(viewModel.mutableDetail.getValue());
                 mBinding.setLifecycleOwner(this);
-            });
+            }
+
             viewModel.getIsFavorite(movieId.intValue());
         }
     }
+
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -136,13 +161,11 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
     }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_force_chrome).setChecked(viewModel.isForceChrome.get());
         return true;

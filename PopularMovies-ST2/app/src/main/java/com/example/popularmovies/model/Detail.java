@@ -1,5 +1,8 @@
 package com.example.popularmovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -7,12 +10,12 @@ import java.util.List;
 /**
  * https://developers.themoviedb.org/3/movies/get-movie-details
  */
-public class Detail {
+public class Detail implements Parcelable {
     Boolean adult;
     String backdropPath;
     String belongsToCollection;
     Integer budget;
-    List<Genre> genres;
+    //List<Genre> genres;
     Integer id;
     String imdbId;
     String originalLanguage;
@@ -22,13 +25,13 @@ public class Detail {
     Double popularity;
     @SerializedName("poster_path")
     String posterPath;
-    List<ProductionCompany> productionCompanies;
-    List<ProductionCountry> productionCountries;
+    //List<ProductionCompany> productionCompanies;
+    //List<ProductionCountry> productionCountries;
     @SerializedName("release_date")
     String releaseDate;
     Long revenue;
     Integer runtime;
-    List<SpokenLaunguage> spokenLanguages;
+    //List<SpokenLaunguage> spokenLanguages;
     String status;
     String tagline;
     String title;
@@ -71,13 +74,13 @@ public class Detail {
         this.budget = budget;
     }
 
-    public List<Genre> getGenres() {
+    /*public List<Genre> getGenres() {
         return genres;
     }
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
-    }
+    }*/
 
     public Integer getId() {
         return id;
@@ -128,7 +131,7 @@ public class Detail {
         this.posterPath = posterPath;
     }
 
-    public List<ProductionCompany> getProductionCompanies() {
+    /*public List<ProductionCompany> getProductionCompanies() {
         return productionCompanies;
     }
 
@@ -142,7 +145,7 @@ public class Detail {
 
     public void setProductionCountries(List<ProductionCountry> productionCountries) {
         this.productionCountries = productionCountries;
-    }
+    }*/
 
     public String getReleaseDate() {
         return releaseDate;
@@ -168,13 +171,13 @@ public class Detail {
         this.runtime = runtime;
     }
 
-    public List<SpokenLaunguage> getSpokenLanguages() {
+    /*public List<SpokenLaunguage> getSpokenLanguages() {
         return spokenLanguages;
     }
 
     public void setSpokenLanguages(List<SpokenLaunguage> spokenLanguages) {
         this.spokenLanguages = spokenLanguages;
-    }
+    }*/
 
     public String getStatus() {
         return status;
@@ -253,4 +256,76 @@ public class Detail {
     public void setReviews(Reviews reviews) {
         this.reviews = reviews;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.adult);
+        dest.writeString(this.backdropPath);
+        dest.writeString(this.belongsToCollection);
+        dest.writeValue(this.budget);
+        dest.writeValue(this.id);
+        dest.writeString(this.imdbId);
+        dest.writeString(this.originalLanguage);
+        dest.writeString(this.originalTitle);
+        dest.writeString(this.overview);
+        dest.writeValue(this.popularity);
+        dest.writeString(this.posterPath);
+        dest.writeString(this.releaseDate);
+        dest.writeValue(this.revenue);
+        dest.writeValue(this.runtime);
+        dest.writeString(this.status);
+        dest.writeString(this.tagline);
+        dest.writeString(this.title);
+        dest.writeValue(this.video);
+        dest.writeValue(this.voteAverage);
+        dest.writeValue(this.voteCount);
+        dest.writeParcelable(this.trailers, flags);
+        dest.writeParcelable(this.reviews, flags);
+    }
+
+    public Detail() {
+    }
+
+    protected Detail(Parcel in) {
+        this.adult = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.backdropPath = in.readString();
+        this.belongsToCollection = in.readString();
+        this.budget = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.imdbId = in.readString();
+        this.originalLanguage = in.readString();
+        this.originalTitle = in.readString();
+        this.overview = in.readString();
+        this.popularity = (Double) in.readValue(Double.class.getClassLoader());
+        this.posterPath = in.readString();
+        this.releaseDate = in.readString();
+        this.revenue = (Long) in.readValue(Long.class.getClassLoader());
+        this.runtime = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.status = in.readString();
+        this.tagline = in.readString();
+        this.title = in.readString();
+        this.video = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.voteAverage = (Double) in.readValue(Double.class.getClassLoader());
+        this.voteCount = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.trailers = in.readParcelable(Trailers.class.getClassLoader());
+        this.reviews = in.readParcelable(Reviews.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Detail> CREATOR = new Parcelable.Creator<Detail>() {
+        @Override
+        public Detail createFromParcel(Parcel source) {
+            return new Detail(source);
+        }
+
+        @Override
+        public Detail[] newArray(int size) {
+            return new Detail[size];
+        }
+    };
 }
