@@ -102,13 +102,10 @@ public class MainActivity extends AppCompatActivity {
     Boolean isFavoriteDirty = false;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("Observe", "" + isFavoriteDirty + "," + resultCode+","+requestCode);
         switch (requestCode) {
             case Constants.DETAIL_RESPONSE_CODE:
                 if (resultCode == Activity.RESULT_OK){
                     isFavoriteDirty = data.getBooleanExtra("FAVORITE_IS_DIRTY", false);
-                    Log.i("Observe2", "" + isFavoriteDirty + "," + resultCode);
-
                 }
                 break;
         }
