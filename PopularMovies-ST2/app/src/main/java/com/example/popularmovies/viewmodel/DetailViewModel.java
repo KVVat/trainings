@@ -8,6 +8,7 @@ import com.example.popularmovies.BuildConfig;
 import com.example.popularmovies.R;
 import com.example.popularmovies.apdater.ReviewsAdapter;
 import com.example.popularmovies.apdater.TrailerAdapter;
+import com.example.popularmovies.model.Favorite;
 import com.example.popularmovies.persistence.FavoriteRepository;
 import com.example.popularmovies.api.MoviesDbRepository;
 import com.example.popularmovies.constants.Constants;
@@ -87,6 +88,14 @@ public class DetailViewModel extends ViewModel {
                 //Log.i("Observe","error in fav:"+e.toString());
             }
         });
+    }
+    public void setFavorite(boolean stat){
+        if(mutableDetail != null) {
+            Detail detail = mutableDetail.getValue();
+            FavoriteRepository.getInstance().insert(
+                    new Favorite(detail.getId(),
+                    stat, detail.getTitle(), detail.getPosterPath()));
+        }
     }
 
     public MutableLiveData<Detail> getDetail(Long movie_id) {

@@ -9,6 +9,7 @@ import androidx.databinding.Observable;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.paging.DataSource;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PageKeyedDataSource;
 import androidx.paging.PagedList;
@@ -17,6 +18,7 @@ import com.example.popularmovies.apdater.PagingMoviesAdapter;
 import com.example.popularmovies.datasource.MovieDataSource;
 import com.example.popularmovies.datasource.MovieDataSourceFactory;
 import com.example.popularmovies.model.Movie;
+
 
 
 public class MainViewModel extends ViewModel {
@@ -43,7 +45,7 @@ public class MainViewModel extends ViewModel {
                 .build();
     }
 
-    public void init(Context ctx) {
+    public void init() {
         adapter = new PagingMoviesAdapter();
         loading = new ObservableInt(View.GONE);
         showEmpty = new ObservableInt(View.GONE);
@@ -53,12 +55,19 @@ public class MainViewModel extends ViewModel {
         return adapter;
     }
 
+    public DataSource<?,Movie> getMovieDatasource(){
+        PagedList<Movie> pagedList = moviePagedList.getValue();
+        if(pagedList!=null){
+            DataSource<?, Movie> dataSource = pagedList.getDataSource();
+            return dataSource;
+        }
+        return null;
+    }
     public Movie getPagedMovieAt(Integer index) {
         if (moviePagedList.getValue() != null && index != null) {
             return moviePagedList.getValue().get(index);
         }
         return null;
     }
-
 
 }

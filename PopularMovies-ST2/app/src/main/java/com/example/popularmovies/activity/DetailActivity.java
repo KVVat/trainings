@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
@@ -14,8 +15,6 @@ import com.example.popularmovies.R;
 import com.example.popularmovies.constants.Constants;
 import com.example.popularmovies.databinding.ActivityDetailBinding;
 import com.example.popularmovies.model.Detail;
-import com.example.popularmovies.model.Favorite;
-import com.example.popularmovies.persistence.FavoriteRepository;
 import com.example.popularmovies.utils.SharedPreferenceUtil;
 import com.example.popularmovies.viewmodel.DetailViewModel;
 
@@ -31,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
     DetailViewModel viewModel;
     private ActivityDetailBinding mBinding;
     private Long movieId;
@@ -52,22 +50,21 @@ public class DetailActivity extends AppCompatActivity {
         CheckBox checkBox = findViewById(R.id.checkFavorite);
         checkBox.setOnClickListener(v->{
             CheckBox chk = (CheckBox)v;
-            Detail detail = viewModel.mutableDetail.getValue();
             if(chk.isChecked()){
-                FavoriteRepository.getInstance().insert(new Favorite(
-                        movieId.intValue(),true,detail.getTitle(),detail.getPosterPath()));
+                viewModel.setFavorite(true);
             } else {
-                FavoriteRepository.getInstance().insert(new Favorite(
-                        movieId.intValue(),false, detail.getTitle(),detail.getPosterPath()));
+                viewModel.setFavorite(false);
             }
             favorite_dirty=true;//mark dirty for parent update.
         });
 
-        mToolbar = findViewById(R.id.toolbar_detail);
+        Toolbar mToolbar = findViewById(R.id.toolbar_detail);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
     }
 
     private void setupBindings(Bundle savedInstanceState) {
@@ -77,6 +74,7 @@ public class DetailActivity extends AppCompatActivity {
         if(savedInstanceState == null){
             viewModel.init(this);
             viewModel.getTrailerAdapter().setOnItemClickListener(view->{
+                //Launch Youtube Url
                 String site = (String)view.getTag(R.string.trailer_url);
                 Intent webIntent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse("https://www.youtube.com/watch?v="+site));
@@ -87,7 +85,9 @@ public class DetailActivity extends AppCompatActivity {
                 Intent chooser = Intent.createChooser(webIntent,"Open url from");
                 try {
                     this.startActivity(chooser);
-                } catch (ActivityNotFoundException ex) { }
+                } catch (ActivityNotFoundException ex) {
+                    Log.i("Info","Activity Not Found To Launch Youtube");
+                }
             });
         }
         mBinding.setModel(viewModel);
@@ -111,7 +111,6 @@ public class DetailActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable("detail",viewModel.mutableDetail.getValue());
-
     }
 
 
@@ -141,20 +140,21 @@ public class DetailActivity extends AppCompatActivity {
             if(viewModel.mutableDetail.getValue()==null) {
                 viewModel.getDetail(movieId).observe(this, detail -> {
                     mBinding.setDetail(detail);
+                    //This line is need to update values on UI screen.
                     mBinding.setLifecycleOwner(this);
                 });
             } else {
                 mBinding.setDetail(viewModel.mutableDetail.getValue());
+                //This line is need to update values on UI screen.
                 mBinding.setLifecycleOwner(this);
             }
-
             viewModel.getIsFavorite(movieId.intValue());
         }
     }
 
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.activity_detail);
     }
@@ -180,7 +180,6 @@ public class DetailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.action_reload_detail:
-                if(movieId==null) movieId=24L;
                 updateDetail();
                 break;
             case R.id.action_force_chrome:

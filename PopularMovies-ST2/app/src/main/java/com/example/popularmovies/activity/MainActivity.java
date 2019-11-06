@@ -4,7 +4,7 @@ package com.example.popularmovies.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+//import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +19,7 @@ import com.example.popularmovies.utils.SharedPreferenceUtil;
 import com.example.popularmovies.viewmodel.MainViewModel;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
@@ -55,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
          */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         setupMenuTitle(mSortMode);
     }
 
@@ -81,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         if (savedInstanceState == null) {
-            viewModel.init(this);
+            viewModel.init();
             viewModel.getAdapter().setOnItemClickListener(view->{
                 Long id = (Long)view.getTag(R.string.card_movie_id);
 
@@ -97,12 +101,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case Constants.DETAIL_RESPONSE_CODE:
-                if (resultCode == Activity.RESULT_OK){
-                    isFavoriteDirty = data.getBooleanExtra("FAVORITE_IS_DIRTY", false);
-                }
-                break;
+        if (requestCode == Constants.DETAIL_RESPONSE_CODE
+                && resultCode == Activity.RESULT_OK){
+            isFavoriteDirty =
+                    data.getBooleanExtra("FAVORITE_IS_DIRTY", false);
         }
         super.onActivityResult(requestCode,resultCode,data);
     }
@@ -116,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         rv.setNestedScrollingEnabled(true);
 
         viewModel.moviePagedList.observe(this,items->{
-
             viewModel.loading.set(View.GONE);
             if(viewModel.getAdapter()!=null) {
                 viewModel.getAdapter().submitList(items);
@@ -125,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     viewModel.showEmpty.set(View.GONE);
                 }
-                //mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
             }
         });
 
@@ -170,14 +170,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_reload_screen:
                 viewModel.loading.set(View.VISIBLE);
-                viewModel.moviePagedList.getValue().getDataSource().invalidate();
+                viewModel.getMovieDatasource().invalidate();
                 return true;
         }
         if(prevMode != mSortMode) {
             viewModel.loading.set(View.VISIBLE);
             SharedPreferenceUtil.getInstance(this).setSortMode(mSortMode.getId());
             MovieDataSourceFactory.setSort(mSortMode);
-            viewModel.moviePagedList.getValue().getDataSource().invalidate();
+            viewModel.getMovieDatasource().invalidate();
             setupMenuTitle(mSortMode);
             return true;
         }
@@ -191,8 +191,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setupMenuTitle(MovieSortMode sortMode){
-        //ActionBar toolbar = getSupportActionBar();
-        getSupportActionBar().setTitle(sortMode.getTitleRes());
+        ActionBar actionbar = getSupportActionBar();
+        if(actionbar != null){
+            actionbar.setTitle(sortMode.getTitleRes());
+        }
     }
 
     //private static final String BUNDLE_RECYCLER_STATE = "popularmoview.recycler.state";
@@ -204,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         //Log.i("Observe","saveState called");
         //outState.putParcelable(BUNDLE_RECYCLER_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
         super.onSaveInstanceState(outState);
