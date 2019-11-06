@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
     private MovieSortMode mSortMode;
-    /**Is favorite data updates from Detail activity? */
+    /**Did favorite data update from Detail activity? */
     private Boolean isFavoriteDirty = false;
 
 

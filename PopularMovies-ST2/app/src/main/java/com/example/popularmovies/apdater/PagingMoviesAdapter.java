@@ -33,7 +33,7 @@ public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAda
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         // I can't use data-binding in here.(In that case Jetpack paging method didn't call.
-        // It looks need to pass each Items to the viewholder to use, Jetpack paging.
+        // It looks need to pass each Items to the view holder for use Jetpack paging.
         Movie movie = getItem(position);
         if(movie != null) {
             holder.bindTo(movie, position);
