@@ -67,6 +67,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(position >0) {
+
             GenericViewHolder gh = (GenericViewHolder)holder;
             gh.bind(viewModel, position - 1);
             gh.rootView.setOnClickListener(view -> {
