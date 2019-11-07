@@ -17,6 +17,7 @@ import com.example.popularmovies.datasource.MovieDataSourceFactory;
 import com.example.popularmovies.utils.NetworkUtil;
 import com.example.popularmovies.utils.SharedPreferenceUtil;
 import com.example.popularmovies.viewmodel.MainViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -26,7 +27,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private MainViewModel viewModel;
     private MovieSortMode mSortMode;
@@ -45,22 +47,27 @@ public class MainActivity extends AppCompatActivity {
 
         MovieDataSourceFactory.setSort(mSortMode);////sortKey(mSortMode));
 
-        /*Intent intent = new Intent(this,DetailActivity.class);
-        intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,24L);
-        startActivity(intent);
-        */
+//        Intent intent = new Intent(this,DetailActivity.class);
+//        intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,24L);
+//        startActivity(intent);
+
         setupBindings(savedInstanceState);
 
+
+        BottomNavigationView bnav = findViewById(R.id.bottom_navigation);
+        bnav.setOnNavigationItemSelectedListener(this);
         /*
          * We need to place setup Toolbar in here
          */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
         setupMenuTitle(mSortMode);
+
+        /*
+         * append bottom menu
+         */
+        this.onNavigationItemSelected(mSortMode.getMenuRes());
+        bnav.setSelectedItemId(mSortMode.getMenuRes());
     }
 
     @Override
@@ -130,12 +137,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -182,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     protected void onPause()
@@ -210,5 +218,37 @@ public class MainActivity extends AppCompatActivity {
         //Log.i("Observe","saveState called");
         //outState.putParcelable(BUNDLE_RECYCLER_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item){
+        return this.onNavigationItemSelected(item.getItemId());
+    }
+    public boolean onNavigationItemSelected(int menuItemId){//@NonNull MenuItem item) {
+        MovieSortMode prevMode = mSortMode;
+        switch (menuItemId) {
+            case R.id.action_sort_popularity:
+                mSortMode=MovieSortMode.SORT_MODE_POPULAR;
+                break;
+            case R.id.action_sort_toprated:
+                mSortMode=MovieSortMode.SORT_MODE_TOPRATED;
+                break;
+            case R.id.action_items_favorite:
+                mSortMode=MovieSortMode.SORT_MODE_FAVORITE;
+                break;
+        }
+        if(prevMode != mSortMode) {
+            viewModel.loading.set(View.VISIBLE);
+            SharedPreferenceUtil.getInstance(this).setSortMode(mSortMode.getId());
+            MovieDataSourceFactory.setSort(mSortMode);
+            viewModel.getMovieDatasource().invalidate();
+            setupMenuTitle(mSortMode);
+            return true;
+        }
+        return true;
+    }
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

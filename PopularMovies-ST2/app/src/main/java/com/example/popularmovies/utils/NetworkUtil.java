@@ -12,6 +12,7 @@ public class NetworkUtil {
     public static boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) ApplicationContext.
                 instance.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(cm == null) return false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Network nw = cm.getActiveNetwork();
             if (nw == null) return false;

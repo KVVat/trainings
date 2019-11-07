@@ -14,20 +14,16 @@ import androidx.room.Update;
 public interface FavoriteDao {
 
     @Query("SELECT COUNT(*) from favorite where is_favorite=1")
-    public Integer getFavoriteCount();
+    Integer getFavoriteCount();
 
     @Query("SELECT * from favorite  where is_favorite=1 ORDER BY movie_id LIMIT :limit OFFSET :offset")
-    public List<Favorite> getFavoritesLimitOffset(Integer limit,Integer offset);
-
-    //fun getUsersLimitOffset(limit: Int, offset: Int): List<User>
+    List<Favorite> getFavoritesLimitOffset(Integer limit,Integer offset);
 
 
     @Query("SELECT is_favorite from favorite where movie_id=:movieId")
-    public Boolean isFavorite(final Integer movieId);
+    Boolean isFavorite(final Integer movieId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insert(Favorite favorite);
-    @Update()
-    public void update(Favorite favorite);
+    void insert(Favorite favorite);
 
 }

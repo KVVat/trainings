@@ -38,7 +38,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    //For to handle itemclick
+    //For to handle item click
     private View.OnClickListener listener;
     public void setOnItemClickListener(View.OnClickListener listener) {
         this.listener = listener;
@@ -85,7 +85,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     class HeaderViewHolder extends RecyclerView.ViewHolder {
-        public HeaderViewHolder(@NonNull View itemView) {
+        HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }

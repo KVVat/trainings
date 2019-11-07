@@ -23,7 +23,7 @@ public class SharedPreferenceUtil {
     public void setSortMode(int sortMode){
         SharedPreferences.Editor editor = mSharedPref.edit();
         editor.putInt("SortMode", sortMode);
-        editor.commit();
+        editor.apply();
     }
 
     public int getSortMode(){
@@ -33,7 +33,7 @@ public class SharedPreferenceUtil {
     public void setForceChorme(Boolean mode){
         SharedPreferences.Editor editor = mSharedPref.edit();
         editor.putBoolean("ForceChrome", mode);
-        editor.commit();
+        editor.apply();
     }
 
     public Boolean getForceChrome(){

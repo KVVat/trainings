@@ -114,8 +114,11 @@ public class DetailViewModel extends ViewModel {
             @Override
             public Object apply(Object[] objects) throws Exception {
                 Detail detail = new Detail();
+                if(objects.length == 0) return detail;
+
+                detail = (Detail)objects[0];
+
                 if(objects.length>=2){
-                    detail = (Detail)objects[0];
                     detail.setTrailers((Trailers)objects[1]);
                 }
                 if(objects.length>=3){
@@ -131,7 +134,6 @@ public class DetailViewModel extends ViewModel {
                         mainLayout.set(View.VISIBLE);
                         loading.set(View.GONE);
                     }
-
                     @Override
                     public void onError(Throwable e) {
                         Log.i("Observe","error in dt:"+e.toString()+","+e.getMessage());

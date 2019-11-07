@@ -40,7 +40,7 @@ public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAda
         } else {
             holder.bindTo(new Movie("(Load failure)",0),position);
         }
-        holder.cardView.setOnClickListener(view->{ listener.onClick(view); });
+        holder.cardView.setOnClickListener(view->listener.onClick(view));
     }
 
     @Override
@@ -59,31 +59,31 @@ public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAda
                 @Override
                 public boolean areItemsTheSame(Movie oldItem, Movie newItem) {
 
-                    return oldItem.getId() == newItem.getId();
+                    return oldItem.getId().equals(newItem.getId());
                 }
 
                 @Override
-                public boolean areContentsTheSame(Movie oldItem, Movie newItem) {
+                public boolean areContentsTheSame(Movie oldItem, @NonNull Movie newItem) {
 
                     return oldItem.equals(newItem);
                 }
             };
 
 
-    public class MovieViewHolder extends RecyclerView.ViewHolder {
+    class MovieViewHolder extends RecyclerView.ViewHolder {
 
-        public final ImageView imageView;
+        final ImageView imageView;
         final TextView textView;
         final CardView cardView;
 
-        public MovieViewHolder(@NonNull View itemView) {
+        MovieViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView = (CardView) itemView;
             imageView = itemView.findViewById(R.id.poster_view);
             textView = itemView.findViewById(R.id.text_view);
         }
 
-        public void bindTo(Movie item, int position) {
+        void bindTo(Movie item, int position) {
             //text.setText("Page: " + item.id + " | ID:" + position);
             cardView.setTag(R.string.card_movie_id,item.getId());
             cardView.setTag(R.string.card_position_id,position);

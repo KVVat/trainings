@@ -88,14 +88,14 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@{detail.originalTitle}"
-                android:textSize="24sp"
+                android:textSize="32sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/detailPosterView"
-                android:layout_width="140dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:minHeight="200dp"
+                android:minHeight="400dp"
                 android:layout_below="@+id/detailOriginalTitle"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
@@ -115,21 +115,26 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="4dp"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_toEndOf="@+id/detailPosterView"
                 android:layout_toRightOf="@+id/detailPosterView"
                 android:maxHeight="280dp">
-
+            <LinearLayout
+                android:id="@+id/detailSpec2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="280dp"
+                android:orientation="vertical">
                 <TextView
                     android:id="@+id/detailReleaseDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="0dp"
                     android:text="@{detail.releaseDate}"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/detailPlayingTime"
@@ -137,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@{Integer.toString(detail.runtime)+`min`}"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/detailUserRating"
@@ -145,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@{Double.toString(detail.voteAverage)+`/10.0`}"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <CheckBox
@@ -153,27 +158,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    android:layout_marginLeft="25dp"
+                    android:paddingRight="20dp"
                     android:checked="@{model.isFavorite}"
                     android:button="@drawable/btn_star_selector"
                     android:text="Favorite" />
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/detailOverview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="20sp"
+                    android:text="@{detail.overview}" />
             </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/detailOverview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/detailPosterView"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="350dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="8dp"
-                android:maxHeight="280dp"
-                android:text="@{detail.overview}" />
+
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -187,7 +191,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
 
-                android:layout_below="@id/detailOverview"
+                android:layout_below="@id/detailPosterView"
                 app:spanCount="1" />
 
             <androidx.recyclerview.widget.RecyclerView
