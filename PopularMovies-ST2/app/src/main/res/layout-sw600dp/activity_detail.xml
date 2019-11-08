@@ -57,7 +57,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:visibility="@{model.error}"
-            android:text="@string/no_network_msg" />
+            android:text="No network connection available.\nTry `Reload screen` on option menu."/>
 
     </RelativeLayout>
 
