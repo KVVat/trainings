@@ -20,18 +20,19 @@
     android:foreground="?android:attr/selectableItemBackground">
 
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/trailer_icon_size"
+        android:layout_height="@dimen/trailer_row_height"
         android:src="@drawable/ic_play"
         android:gravity="center_vertical"
-        ></ImageView>
+    ></ImageView>
 
     <TextView
         android:id="@+id/contentText"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/trailer_row_height"
         android:textColor="#000"
         android:padding="5dp"
+        android:textSize="@dimen/trailer_text_size"
         android:gravity="center_vertical|left"
         android:maxLines="2"
         android:text="@{trailer.name}"/>

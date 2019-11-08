@@ -60,7 +60,7 @@
             android:gravity="center"
 
             android:visibility="@{model.error}"
-            android:text="No network connection available.\nTry `Reload screen` on option menu."/>
+            android:text="@string/no_network_msg"/>
 
     </RelativeLayout>
 
@@ -168,10 +168,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="350dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="16dp"
+                android:justificationMode="inter_word"
                 android:maxHeight="280dp"
                 android:text="@{detail.overview}" />
 

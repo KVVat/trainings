@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="recycler_title_size">20sp</dimen>
+    <dimen name="review_content_title_size">24sp</dimen>
+    <dimen name="review_content_text_size">20sp</dimen>
+    <dimen name="review_title_padding">16dp</dimen>
+    <dimen name="trailer_text_size">20sp</dimen>
+    <dimen name="trailer_icon_size">50dp</dimen>
+    <dimen name="trailer_row_height">70dp</dimen>
+    <integer name="mv_count">4</integer>
+</resources>

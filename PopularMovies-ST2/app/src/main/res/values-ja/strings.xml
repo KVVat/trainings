@@ -12,4 +12,5 @@
     <string name="trailer_url">trailer_url</string>
     <string name="reload_screen">Reload screen</string>
     <string name="force_chrome">Force Chrome to open trailers</string>
+    <string name="no_network_msg">ネットワークに接続していません</string>
 </resources>

@@ -12,8 +12,6 @@
         name="detail"
         type="com.example.popularmovies.model.Detail" />
 
-
-    <!--variable name="detail" type="com.example.popularmovies.model.Detail"-->
 </data>
 
 
@@ -58,9 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-
             android:visibility="@{model.error}"
-            android:text="No network connection available.\nTry `Reload screen` on option menu."/>
+            android:text="@string/no_network_msg" />
 
     </RelativeLayout>
 

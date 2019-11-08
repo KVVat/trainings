@@ -13,6 +13,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:text="@string/trailers"
-        android:textSize="20sp"
+        android:textSize="@dimen/recycler_title_size"
         android:textStyle="bold" />
 </LinearLayout>

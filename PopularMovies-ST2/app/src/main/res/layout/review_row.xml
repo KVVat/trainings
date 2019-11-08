@@ -29,21 +29,21 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical|left"
         android:maxLines="20"
-        android:padding="8dp"
+        android:padding="@dimen/review_title_padding"
         android:text="@{review.author}"
         android:textColor="#000"
         android:textStyle="bold|italic"
-        android:textSize="16sp" />
+        android:textSize="@dimen/review_content_title_size" />
     <TextView
-            android:id="@+id/contentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|left"
-            android:maxLines="10"
-            android:padding="16dp"
-            android:text="@{review.content}"
-            android:textColor="#000"
-            android:textSize="14sp" />
+        android:id="@+id/contentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:justificationMode="inter_word"
+        android:padding="16dp"
+        android:text="@{review.content}"
+        android:textColor="#000"
+        android:textSize="@dimen/review_content_text_size" />
 
 </LinearLayout>
     </androidx.cardview.widget.CardView>
