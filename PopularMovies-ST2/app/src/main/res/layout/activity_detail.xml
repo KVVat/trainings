@@ -155,7 +155,7 @@
                     android:layout_marginTop="16dp"
                     android:checked="@{model.isFavorite}"
                     android:button="@drawable/btn_star_selector"
-                    android:text="Favorite" />
+                    android:text="@string/favorite" />
             </LinearLayout>
 
 
@@ -202,15 +202,6 @@
                 android:layout_marginBottom="16dp"
                 android:layout_below="@id/list_trailers"
                 app:spanCount="1" />
-
-
-            <!--TextView
-                android:id="@+id/dummyTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/detailOverview"
-                android:layout_marginTop="16dp"
-                android:text="@string/lorenepsum" -->
 
         </RelativeLayout>
 

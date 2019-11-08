@@ -121,6 +121,7 @@
                 android:layout_toRightOf="@+id/detailPosterView"
                 android:maxHeight="280dp"
                 android:orientation="horizontal">
+
             <LinearLayout
                 android:id="@+id/detailSpec2"
                 android:layout_width="wrap_content"
@@ -163,7 +164,7 @@
                     android:layout_marginTop="16dp"
                     android:button="@drawable/btn_star_selector"
                     android:checked="@{model.isFavorite}"
-                    android:text="Favorite" />
+                    android:text="@string/favorite" />
             </LinearLayout>
                 <TextView
                     android:id="@+id/detailOverview"
@@ -173,7 +174,6 @@
                     android:maxHeight="280dp"
                     android:text="@{detail.overview}" />
             </LinearLayout>
-
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -203,14 +203,6 @@
                 android:layout_below="@id/list_trailers"
                 app:spanCount="1" />
 
-
-            <!--TextView
-                android:id="@+id/dummyTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/detailOverview"
-                android:layout_marginTop="16dp"
-                android:text="@string/lorenepsum" -->
 
         </RelativeLayout>
 

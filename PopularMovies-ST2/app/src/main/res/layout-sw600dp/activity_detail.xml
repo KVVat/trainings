@@ -115,7 +115,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="4dp"
                 android:orientation="horizontal"
@@ -164,7 +164,7 @@
                     android:paddingRight="20dp"
                     android:checked="@{model.isFavorite}"
                     android:button="@drawable/btn_star_selector"
-                    android:text="Favorite" />
+                    android:text="@string/favorite" />
 
                 </LinearLayout>
                 <TextView
@@ -175,9 +175,6 @@
                     android:textSize="20sp"
                     android:text="@{detail.overview}" />
             </LinearLayout>
-
-
-
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -207,14 +204,6 @@
                 android:layout_below="@id/list_trailers"
                 app:spanCount="1" />
 
-
-            <!--TextView
-                android:id="@+id/dummyTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/detailOverview"
-                android:layout_marginTop="16dp"
-                android:text="@string/lorenepsum" -->
 
         </RelativeLayout>
 

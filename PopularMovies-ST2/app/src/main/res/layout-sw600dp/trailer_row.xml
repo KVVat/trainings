@@ -35,6 +35,6 @@
         android:textSize="20sp"
         android:gravity="center_vertical|left"
         android:maxLines="2"
-        android:text=""/>
+        android:text="@{trailer.name}"/>
 </LinearLayout>
 </layout>

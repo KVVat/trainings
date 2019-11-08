@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">人気の映画</string>
+    <string name="action_settings">設定</string>
+    <string name="detail_name">映画詳細</string>
+    <string name="favorites">お気に入り</string>
+    <string name="most_popular">人気の映画</string>
+    <string name="reviews">レビュー</string>
+    <string name="trailers">トレーラー</string>
+    <string name="top_rated">高評価</string>
+    <string name="favorite">お気に入り</string>
+    <string name="trailer_url">trailer_url</string>
+    <string name="reload_screen">Reload screen</string>
+    <string name="force_chrome">Force Chrome to open trailers</string>
+</resources>
