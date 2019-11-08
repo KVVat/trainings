@@ -5,7 +5,7 @@ What is it?
 
 My implementation of the exam. 
 The application access to the `[The movie datase](https://www.themoviedb.org/)`,
-then retrieve its data from api they are provided.
+then retrieve its data from api they provided.
 
 Library
 ------------
