@@ -48,9 +48,7 @@ public class DetailViewModel extends ViewModel {
     public MutableLiveData<Detail> mutableDetail = new MutableLiveData<>();
     private TrailerAdapter trailerAdapter;
     private ReviewsAdapter reviewsAdapter;
-    private Context mCtx;
     public void init(Context ctx) {
-        mCtx = ctx;
         trailerAdapter = new TrailerAdapter(R.layout.trailer_row,this);
         reviewsAdapter = new ReviewsAdapter(R.layout.review_row,this);
         isForceChrome.set(SharedPreferenceUtil.getInstance(ctx).getForceChrome());

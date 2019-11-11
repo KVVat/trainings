@@ -113,7 +113,6 @@ public class DetailActivity extends AppCompatActivity {
         outState.putParcelable("detail",viewModel.mutableDetail.getValue());
     }
 
-
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
 
