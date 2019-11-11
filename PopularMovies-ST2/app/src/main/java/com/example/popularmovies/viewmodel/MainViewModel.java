@@ -1,11 +1,8 @@
 package com.example.popularmovies.viewmodel;
 
 
-import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
-import androidx.databinding.Observable;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -63,11 +60,4 @@ public class MainViewModel extends ViewModel {
         }
         return null;
     }
-    public Movie getPagedMovieAt(Integer index) {
-        if (moviePagedList.getValue() != null && index != null) {
-            return moviePagedList.getValue().get(index);
-        }
-        return null;
-    }
-
 }

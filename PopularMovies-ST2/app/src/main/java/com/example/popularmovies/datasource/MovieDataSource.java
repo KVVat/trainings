@@ -16,11 +16,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Page DataSource for RecyclerView MainActivity.
+ * It supports to handle both network and database activities.
+ */
 public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
     public static final int PAGE_SIZE = 20;
     private static final int FIRST_PAGE = 1;
 
-    private MovieSortMode mSortMode=MovieSortMode.SORT_MODE_POPULAR;//"top_rated";
+    private MovieSortMode mSortMode=MovieSortMode.SORT_MODE_POPULAR;
 
     /**
      * helper for favoirte

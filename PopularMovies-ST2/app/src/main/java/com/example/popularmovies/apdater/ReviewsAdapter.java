@@ -15,6 +15,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * RecyclerView adapter that shows in DetailActivity to show reviews in each movies.
+ *
+ */
 public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int layoutId;
     private int layoutHeaderId=R.layout.reviews_header;
@@ -46,7 +50,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //Log.i("Observer","OnCreate Viwe Holder"+viewType);
+
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
         if(viewType == this.layoutId) {
@@ -85,9 +89,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
         }
     }
+
     class GenericViewHolder extends RecyclerView.ViewHolder {
+
         final ViewDataBinding binding;
         final View rootView;
+
         GenericViewHolder(ViewDataBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
@@ -103,7 +110,6 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             Review review=
                     viewModel.mutableDetail.getValue().getReviews().getResults().get(position);
-            rootView.setTag(R.string.trailer_url,review.getUrl());
 
             binding.setVariable(BR.review,review);
             binding.executePendingBindings();

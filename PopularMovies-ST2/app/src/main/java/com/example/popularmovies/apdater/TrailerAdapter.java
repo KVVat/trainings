@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.example.popularmovies.BR;
 import com.example.popularmovies.R;
+import com.example.popularmovies.model.Detail;
 import com.example.popularmovies.model.Trailer;
 import com.example.popularmovies.viewmodel.DetailViewModel;
 
@@ -15,6 +16,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * RecyclerView adapter that shows in DetailActivity to show trailers in each movies.
+ */
 public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int layoutId;
     private DetailViewModel viewModel;
@@ -27,8 +31,12 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
     @Override
     public int getItemCount() {
-        if(this.viewModel!= null){
-            int size = this.viewModel.mutableDetail.getValue().getTrailers().getResults().size();
+        if(viewModel!= null){
+            Detail detail = viewModel.mutableDetail.getValue();
+            int size = 0;
+            if(detail != null) {
+                size = detail.getTrailers().getResults().size();
+            }
             if(size == 0)
                 return 0;
             else
@@ -47,7 +55,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //Log.i("Observer","OnCreate Viwe Holder"+viewType);
+
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
         if(viewType == this.layoutId) {
@@ -59,8 +67,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .inflate(viewType, parent, false);
             return new HeaderViewHolder(view);
 
-            //layoutInflater.inflate(parent.getContext());
-            //return new HeaderViewHolder(parent.getRootView());
         }
     }
 
@@ -91,8 +97,10 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     class GenericViewHolder extends RecyclerView.ViewHolder {
+
         final ViewDataBinding binding;
         final View rootView;
+
         GenericViewHolder(ViewDataBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
@@ -104,10 +112,12 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.setVariable(BR.viewModel, viewModel);
             binding.setVariable(BR.posTrailer, position);
 
-            Trailer trailer= viewModel.mutableDetail.getValue().getTrailers().getResults().get(position);
-            rootView.setTag(R.string.trailer_url,trailer.getKey());
-
-            binding.setVariable(BR.trailer,trailer);
+            Detail detail = viewModel.mutableDetail.getValue();
+            if(detail != null) {
+                Trailer trailer = detail.getTrailers().getResults().get(position);
+                rootView.setTag(R.string.trailer_url, trailer.getKey());
+                binding.setVariable(BR.trailer,trailer);
+            }
             binding.executePendingBindings();
         }
 

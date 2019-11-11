@@ -28,6 +28,22 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * DetailActivity
+ *
+ *  DetailActivity shows information of the movie, indicated by numerical id which is passed by
+ *  Intent.
+ *
+ *  All shown show data are loaded from movie db via viewModel.
+ *  (In there I need to call 3 different API in parallel.)
+ *
+ *  Also User could mark own's favorite in the screen. The data stores in local database by ROOM persistence.
+ *  In the case of reflect this update on main view, I send dirty flag for that onBackPressed Event.
+ *
+ *  I need to put Detail data into Bundle on SaveInstance Event.
+ *  So, on Detail Model, I've implemented Parcelable interface.
+ *
+ */
 public class DetailActivity extends AppCompatActivity {
 
     DetailViewModel viewModel;

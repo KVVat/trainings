@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+
 
 /**
  * https://developers.themoviedb.org/3/movies/get-movie-details

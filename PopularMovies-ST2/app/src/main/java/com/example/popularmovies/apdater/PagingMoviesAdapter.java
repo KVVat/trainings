@@ -17,6 +17,9 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * A RecyclerView Adapter implements PagedListAdapter
+ */
 public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAdapter.MovieViewHolder> {
 
     public PagingMoviesAdapter() {
@@ -84,19 +87,21 @@ public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAda
         }
 
         void bindTo(Movie item, int position) {
-            //text.setText("Page: " + item.id + " | ID:" + position);
+
             cardView.setTag(R.string.card_movie_id,item.getId());
             cardView.setTag(R.string.card_position_id,position);
 
             imageView.setImageBitmap(null);
             textView.setText(null);
             imageView.setTag(R.id.poster_view, item.getPosterPath());
+
             //Some Content has no poster path.
             String posterPath = item.getPosterPath();
             if(posterPath != null) {
                 Glide.with(imageView).load(BuildConfig.TMDbIMGPATH + item.getPosterPath())
                         .into(imageView);
             } else {
+                //In the case, I'll show the title in text.
                 textView.setText(item.getTitle());
             }
         }

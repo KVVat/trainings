@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 //import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -27,6 +26,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * MainActivity
+ *
+ *  In this activity, I implement a RecyclerView that shows movie poster images.
+ *  When user click a poster, User could load detail page correspond with each poster.
+ *
+ */
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -45,7 +51,7 @@ public class MainActivity extends AppCompatActivity
         mSortMode = MovieSortMode.valueOf(
                 SharedPreferenceUtil.getInstance(this).getSortMode());
 
-        MovieDataSourceFactory.setSort(mSortMode);////sortKey(mSortMode));
+        MovieDataSourceFactory.setSort(mSortMode);
 
 //        Intent intent = new Intent(this,DetailActivity.class);
 //        intent.putExtra(Constants.INTENT_EXTRA_MOVIE_ID,24L);
@@ -54,8 +60,8 @@ public class MainActivity extends AppCompatActivity
         setupBindings(savedInstanceState);
 
 
-        BottomNavigationView bnav = findViewById(R.id.bottom_navigation);
-        bnav.setOnNavigationItemSelectedListener(this);
+        BottomNavigationView b_nav = findViewById(R.id.bottom_navigation);
+        b_nav.setOnNavigationItemSelectedListener(this);
         /*
          * We need to place setup Toolbar in here
          */
@@ -67,7 +73,7 @@ public class MainActivity extends AppCompatActivity
          * append bottom menu
          */
         this.onNavigationItemSelected(mSortMode.getMenuRes());
-        bnav.setSelectedItemId(mSortMode.getMenuRes());
+        b_nav.setSelectedItemId(mSortMode.getMenuRes());
     }
 
     @Override
@@ -137,60 +143,6 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        //use data binding//
-        menu.findItem(R.id.action_sort_popularity).setChecked(false);
-        menu.findItem(R.id.action_sort_toprated).setChecked(false);
-        menu.findItem(R.id.action_items_favorite).setChecked(false);
-        if(mSortMode.getId() == 0) {
-            menu.findItem(R.id.action_sort_popularity).setChecked(true);
-        } else if(mSortMode.getId()==1){
-            menu.findItem(R.id.action_sort_toprated).setChecked(true);
-        } else if(mSortMode.getId() == 2){
-            menu.findItem(R.id.action_items_favorite).setChecked(true);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        MovieSortMode prevMode = mSortMode;
-        switch (id){
-            case R.id.action_sort_popularity:
-                mSortMode=MovieSortMode.SORT_MODE_POPULAR;
-                break;
-            case R.id.action_sort_toprated:
-                mSortMode=MovieSortMode.SORT_MODE_TOPRATED;
-                break;
-            case R.id.action_items_favorite:
-                mSortMode=MovieSortMode.SORT_MODE_FAVORITE;
-                break;
-            case R.id.action_reload_screen:
-                viewModel.loading.set(View.VISIBLE);
-                viewModel.getMovieDatasource().invalidate();
-                return true;
-        }
-        if(prevMode != mSortMode) {
-            viewModel.loading.set(View.VISIBLE);
-            SharedPreferenceUtil.getInstance(this).setSortMode(mSortMode.getId());
-            MovieDataSourceFactory.setSort(mSortMode);
-            viewModel.getMovieDatasource().invalidate();
-            setupMenuTitle(mSortMode);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 
     @Override
     protected void onPause()
@@ -205,17 +157,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //private static final String BUNDLE_RECYCLER_STATE = "popularmoview.recycler.state";
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //Log.i("Observe","restoreState called"+savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        //Log.i("Observe","saveState called");
         //outState.putParcelable(BUNDLE_RECYCLER_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
         super.onSaveInstanceState(outState);
     }

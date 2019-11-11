@@ -4,14 +4,12 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
-import com.example.popularmovies.BuildConfig;
 import com.example.popularmovies.R;
 import com.example.popularmovies.apdater.ReviewsAdapter;
 import com.example.popularmovies.apdater.TrailerAdapter;
 import com.example.popularmovies.model.Favorite;
 import com.example.popularmovies.persistence.FavoriteRepository;
 import com.example.popularmovies.api.MoviesDbRepository;
-import com.example.popularmovies.constants.Constants;
 import com.example.popularmovies.model.Detail;
 import com.example.popularmovies.model.Reviews;
 import com.example.popularmovies.model.Trailers;

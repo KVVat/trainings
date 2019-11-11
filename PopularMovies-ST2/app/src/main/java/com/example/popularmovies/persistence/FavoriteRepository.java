@@ -8,13 +8,19 @@ import com.example.popularmovies.model.Favorite;
 
 import java.util.List;
 
+/**
+ *
+ */
 public class FavoriteRepository {
     private FavoriteDao mFavoriteDao;
+
     private static FavoriteRepository sInstance;
+
     private FavoriteRepository(Application application) {
         FavoriteDatabase db = FavoriteDatabase.getDatabase(application);
         mFavoriteDao = db.favoriteDao();
     }
+
     public static FavoriteRepository getInstance() {
         if (sInstance == null) {
             synchronized (FavoriteRepository.class) {
@@ -25,12 +31,15 @@ public class FavoriteRepository {
         }
         return sInstance;
     }
+
     public Integer getFavoriteCount(){
         return mFavoriteDao.getFavoriteCount();
     }
+
     public List<Favorite> getFavoriteLimitOffset(int limit,int offset){
         return mFavoriteDao.getFavoritesLimitOffset(limit,offset);
     }
+
     public Boolean isFavoirte(final Integer movieId) {
         return  mFavoriteDao.isFavorite(movieId);
     }
