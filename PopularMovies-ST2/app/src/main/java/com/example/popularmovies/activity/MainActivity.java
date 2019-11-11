@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationView b_nav = findViewById(R.id.bottom_navigation);
         b_nav.setOnNavigationItemSelectedListener(this);
         /*
-         * We need to place setup Toolbar in here
+         * We need to place these methods in here
          */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
