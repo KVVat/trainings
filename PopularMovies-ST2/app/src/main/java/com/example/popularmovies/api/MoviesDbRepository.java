@@ -15,7 +15,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- *
+ * Interface of the movie database website api via retrofit2 library.
  */
 public class MoviesDbRepository {
 

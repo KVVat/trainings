@@ -121,7 +121,8 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
         }
     }
 
-    public void setSortMode(MovieSortMode sortMode){
+    //Called by data source factory
+    void setSortMode(MovieSortMode sortMode){
         mSortMode = sortMode;
     }
 
