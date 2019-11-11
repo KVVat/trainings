@@ -14,7 +14,7 @@ I use a lot of up to date library in this application
 with a focus on android jetpack.
 
 + Constraint layout
-+ Cardview
++ CardView
 + Data binding
 + Recyclerview paging library
 + Retrofit 2
@@ -25,6 +25,8 @@ with a focus on android jetpack.
 Note
 ------------
 
++ To compile this application, You need to put themoviedb api key to local.properties file.
+    + tmdbapikey=<<your tmdb api key here>
 + The application constructed with 2 Activities.
 + In this application, you can open trailer by youtube application or chrome.
     + For recent changes, In default every url related with youtube are force to open with youtube application.
