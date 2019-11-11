@@ -22,7 +22,7 @@
     <ImageView
         android:layout_width="@dimen/trailer_icon_size"
         android:layout_height="@dimen/trailer_row_height"
-        android:src="@drawable/ic_play"
+        android:src="@drawable/ic_play_arrow_black_24dp"
         android:gravity="center_vertical"
     ></ImageView>
 
