@@ -27,7 +27,7 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
     private MovieSortMode mSortMode=MovieSortMode.SORT_MODE_POPULAR;
 
     /**
-     * Helper for favoirte. This method loads Favorite data form repository then turn them into Movie type.
+     * Helper for Favoirte items. This method loads Favorite data form repository then turn them into Movie type.
      * @param offset offset of favorite list
      * @return Movie type list that made up by favorite list.
      */

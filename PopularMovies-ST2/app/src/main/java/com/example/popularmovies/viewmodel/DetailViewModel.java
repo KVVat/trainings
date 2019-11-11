@@ -32,6 +32,9 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * viewModel for DetailActivity
+ */
 public class DetailViewModel extends ViewModel {
 
     public ObservableInt loading = new ObservableInt(View.GONE);
@@ -43,6 +46,7 @@ public class DetailViewModel extends ViewModel {
     public MutableLiveData<Detail> mutableDetail = new MutableLiveData<>();
     private TrailerAdapter trailerAdapter;
     private ReviewsAdapter reviewsAdapter;
+
     public void init(Context ctx) {
         trailerAdapter = new TrailerAdapter(R.layout.trailer_row,this);
         reviewsAdapter = new ReviewsAdapter(R.layout.review_row,this);

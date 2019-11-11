@@ -16,7 +16,9 @@ import com.example.popularmovies.datasource.MovieDataSourceFactory;
 import com.example.popularmovies.model.Movie;
 
 
-
+/**
+ * viewModel for MainActivity
+ */
 public class MainViewModel extends ViewModel {
 
     public LiveData<PagedList<Movie>> moviePagedList;

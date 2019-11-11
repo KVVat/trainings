@@ -9,7 +9,7 @@ import com.example.popularmovies.model.Favorite;
 import java.util.List;
 
 /**
- *
+ * Handle Room Database access.
  */
 public class FavoriteRepository {
     private FavoriteDao mFavoriteDao;

@@ -51,7 +51,7 @@ public class PagingMoviesAdapter extends PagedListAdapter<Movie, PagingMoviesAda
         return super.getItemCount();
     }
 
-    //For to handle item click
+    //To handle item click
     private View.OnClickListener listener;
     public void setOnItemClickListener(View.OnClickListener listener) {
         this.listener = listener;
