@@ -18,8 +18,8 @@
         android:layout_marginRight="0dp"
         app:cardBackgroundColor="@android:color/background_dark"
         app:cardCornerRadius="0dp"
-        android:clickable="true"
-        android:focusable="false">
+        android:focusable="true"
+        android:clickable="true">
         <!-- I need to set layout_height in ImageView.-->
         <!-- In case the value not defined recycler view update not works fine. -->
         <ImageView
@@ -35,7 +35,7 @@
             android:layout_height="250dp"
             android:gravity="center"
             android:textSize="12sp"
-            android:textColor="@color/cardview_light_background"
+            android:textColor="@android:color/white"
             android:text="">
         </TextView>
     </androidx.cardview.widget.CardView>
