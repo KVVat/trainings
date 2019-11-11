@@ -6,8 +6,4 @@
         android:title="@string/force_chrome"
         android:checkable="true"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_reload_detail"
-        android:title="@string/reload_screen"
-        app:showAsAction="never" />
 </menu>

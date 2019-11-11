@@ -9,7 +9,7 @@ import android.os.Build;
 import com.example.popularmovies.applilcation.ApplicationContext;
 
 /**
- * isOnline mechod checks, is device network available.
+ * isOnline method checks, Is device network available in proper way.
  */
 public class NetworkUtil {
     public static boolean isOnline() {
@@ -29,7 +29,7 @@ public class NetworkUtil {
                     ||nc.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
             );
         } else {
-            //Deprecated in Android PI//
+            //Deprecated way in Android PI//
             NetworkInfo ninfo = cm.getActiveNetworkInfo();
             if(ninfo != null) {
                 return ninfo.isConnected();

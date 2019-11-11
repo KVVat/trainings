@@ -77,21 +77,28 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             //});
         }
     }
+
     private int getLayoutIdForPosition(int position) {
         if (position==0) return R.layout.reviews_header;
         else return this.layoutId;
     }
+
     @Override
     public int getItemViewType(int position) {
         return getLayoutIdForPosition(position);
     }
-
+    /**
+     * ViewHolder for Header
+     */
     class HeaderViewHolder extends RecyclerView.ViewHolder {
         HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
 
+    /**
+     * ViewHolder for Each Line (Use Data binding to show data)
+     */
     class GenericViewHolder extends RecyclerView.ViewHolder {
 
         final ViewDataBinding binding;

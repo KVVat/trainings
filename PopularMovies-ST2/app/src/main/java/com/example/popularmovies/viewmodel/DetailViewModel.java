@@ -79,6 +79,7 @@ public class DetailViewModel extends ViewModel {
             }
         });
     }
+
     public void setFavorite(boolean stat){
         if(mutableDetail != null) {
             Detail detail = mutableDetail.getValue();
@@ -91,9 +92,11 @@ public class DetailViewModel extends ViewModel {
     }
 
     public MutableLiveData<Detail> getDetail(Long movie_id) {
-        //User RxJava2 to implement call three web api in a row.
+        //User RxJava2 zip to implement call three web api in a row.
         List<Observable<?>> rq = new ArrayList<>();
+
         String id = movie_id.toString();
+
         rq.add(MoviesDbRepository.getInstance().getDetail(id));
         rq.add(MoviesDbRepository.getInstance().getTrailers(id));
         rq.add(MoviesDbRepository.getInstance().getReviews(id,1));

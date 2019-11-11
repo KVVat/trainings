@@ -29,7 +29,7 @@
         android:gravity="center"
 
         android:visibility="@{model.error}"
-        android:text="No network connection available.\nTry `Reload screen` on option menu."/>
+        android:text="@string/no_network_msg"/>
 
 </RelativeLayout>
 </layout>

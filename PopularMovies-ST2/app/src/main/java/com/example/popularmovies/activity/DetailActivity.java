@@ -194,9 +194,6 @@ public class DetailActivity extends AppCompatActivity {
                 onBackPressed();
                 finish();
                 break;
-            case R.id.action_reload_detail:
-                updateDetail();
-                break;
             case R.id.action_force_chrome:
                 viewModel.toggleForceChrome();
                 SharedPreferenceUtil.getInstance(this).setForceChorme(

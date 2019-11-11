@@ -56,7 +56,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:visibility="@{viewModel.showEmpty}"
-            android:text="No network connection available.\nTry `Reload screen` on option menu."/>
+            android:text="@string/no_network_msg"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
