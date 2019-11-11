@@ -61,7 +61,7 @@ public class DetailViewModel extends ViewModel {
     }
 
     public void getIsFavorite(Integer movieId){
-        //User RxJava2 to implement query.
+        //Use RxJava2 to implement Room query.
         Single.create(new SingleOnSubscribe<Boolean>() {
             @Override
             public void subscribe(SingleEmitter<Boolean> emitter)  {
@@ -79,7 +79,7 @@ public class DetailViewModel extends ViewModel {
             }
             @Override
             public void onError(Throwable e) {
-                //Log.i("Observe","error in fav:"+e.toString());
+                Log.i("Observe","error in load favorite:"+e.toString());
             }
         });
     }
@@ -131,7 +131,7 @@ public class DetailViewModel extends ViewModel {
                     }
                     @Override
                     public void onError(Throwable e) {
-                        Log.i("Observe","error in dt:"+e.toString()+","+e.getMessage());
+                        Log.i("Observe","error in load detail:"+e.toString()+","+e.getMessage());
                         error.set(View.VISIBLE);
                         mainLayout.set(View.GONE);
                         loading.set(View.GONE);
