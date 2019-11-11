@@ -41,10 +41,7 @@ public class Trailers implements Parcelable {
         dest.writeTypedList(this.results);
     }
 
-    public Trailers() {
-    }
-
-    protected Trailers(Parcel in) {
+    private Trailers(Parcel in) {
         this.id = in.readString();
         this.results = in.createTypedArrayList(Trailer.CREATOR);
     }

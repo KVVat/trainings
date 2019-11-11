@@ -15,7 +15,7 @@ public class ResultMovies extends BaseObservable
     @SerializedName("page")
     private Integer page;
     @SerializedName("results")
-    List<Movie> movies;
+    private List<Movie> movies;
     @SerializedName("total_pages")
     private Integer pages;
 

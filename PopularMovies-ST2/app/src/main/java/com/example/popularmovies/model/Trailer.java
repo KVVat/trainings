@@ -77,7 +77,7 @@ public class Trailer implements Parcelable {
         dest.writeString(this.type);
     }
 
-    protected Trailer(Parcel in) {
+    private Trailer(Parcel in) {
         this.id = in.readString();
         this.key = in.readString();
         this.site = in.readString();

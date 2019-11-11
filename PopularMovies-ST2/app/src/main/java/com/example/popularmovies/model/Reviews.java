@@ -71,10 +71,7 @@ public class Reviews implements Parcelable {
         dest.writeTypedList(this.results);
     }
 
-    public Reviews() {
-    }
-
-    protected Reviews(Parcel in) {
+    private Reviews(Parcel in) {
         this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.page = (Integer) in.readValue(Integer.class.getClassLoader());
         this.totalPages = (Integer) in.readValue(Integer.class.getClassLoader());
