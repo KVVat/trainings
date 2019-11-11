@@ -26,7 +26,7 @@ Note
 ------------
 
 + To compile this application, You need to put themoviedb api key to local.properties file.
-    + tmdbapikey=`your tmdb api key here`
+    + tmdb.apikey=`your tmdb api key here`
 + The application constructed with 2 Activities.
 + In this application, you can open trailer by youtube application or chrome.
     + For recent changes, In default every url related with youtube are force to open with youtube application.
