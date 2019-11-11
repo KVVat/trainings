@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int layoutId;
-    private int layoutHeaderId=R.layout.reviews_header;
     private DetailViewModel viewModel;
     public ReviewsAdapter(@LayoutRes int layoutId, DetailViewModel viewModel) {
         //Log.i("Observer","ReviewsAdapter const");
@@ -31,8 +30,11 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemCount() {
         if(this.viewModel!= null){
-           int size= this.viewModel.mutableDetail.getValue().getReviews().getResults().size();
-            if(size == 0)
+           int size= 0;
+           if(viewModel.mutableDetail.getValue() != null) {
+               size = viewModel.mutableDetail.getValue().getReviews().getResults().size();
+           }
+           if(size == 0)
                 return 0;
             else
                 return size+1;
@@ -42,10 +44,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     //For to handle itemclick
-    private View.OnClickListener listener;
-    public void setOnItemClickListener(View.OnClickListener listener) {
-        this.listener = listener;
-    }
+    //private View.OnClickListener listener;
+    //public void setOnItemClickListener(View.OnClickListener listener) {
+    //    this.listener = listener;
+    //}
 
     @NonNull
     @Override
@@ -70,13 +72,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if(position >0) {
             GenericViewHolder gh = (GenericViewHolder)holder;
             gh.bind(viewModel, position - 1);
-            gh.rootView.setOnClickListener(view -> {
-                if (listener != null) listener.onClick(view);
-            });
+            //gh.rootView.setOnClickListener(view -> {
+            //    if (listener != null) listener.onClick(view);
+            //});
         }
     }
     private int getLayoutIdForPosition(int position) {
-        if (position==0) return this.layoutHeaderId;
+        if (position==0) return R.layout.reviews_header;
         else return this.layoutId;
     }
     @Override
@@ -85,7 +87,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     class HeaderViewHolder extends RecyclerView.ViewHolder {
-        public HeaderViewHolder(@NonNull View itemView) {
+        HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
@@ -108,10 +110,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.setVariable(BR.viewModel, viewModel);
             binding.setVariable(BR.posReview, position);
 
-            Review review=
-                    viewModel.mutableDetail.getValue().getReviews().getResults().get(position);
+            if(viewModel.mutableDetail.getValue() != null) {
+                Review review =
+                        viewModel.mutableDetail.getValue().getReviews().getResults().get(position);
 
-            binding.setVariable(BR.review,review);
+                binding.setVariable(BR.review, review);
+            }
             binding.executePendingBindings();
         }
 

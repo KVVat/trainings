@@ -35,8 +35,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DetailViewModel extends ViewModel {
 
-    private String TAG="DetailViewModel";
-
     public ObservableInt loading = new ObservableInt(View.GONE);
     public ObservableInt error= new ObservableInt(View.GONE);
     public ObservableInt mainLayout= new ObservableInt(View.GONE);
@@ -59,14 +57,14 @@ public class DetailViewModel extends ViewModel {
     }
 
     public void toggleForceChrome(){
-        isForceChrome.set(isForceChrome.get()==true?false:true);
+        isForceChrome.set(!isForceChrome.get());
     }
 
     public void getIsFavorite(Integer movieId){
         //User RxJava2 to implement query.
         Single.create(new SingleOnSubscribe<Boolean>() {
             @Override
-            public void subscribe(SingleEmitter<Boolean> emitter) throws Exception {
+            public void subscribe(SingleEmitter<Boolean> emitter)  {
                 Boolean b = FavoriteRepository.getInstance().isFavoirte(movieId);
                 if(b == null) b=false;
                 emitter.onSuccess(b);
@@ -88,9 +86,11 @@ public class DetailViewModel extends ViewModel {
     public void setFavorite(boolean stat){
         if(mutableDetail != null) {
             Detail detail = mutableDetail.getValue();
-            FavoriteRepository.getInstance().insert(
-                    new Favorite(detail.getId(),
-                    stat, detail.getTitle(), detail.getPosterPath()));
+            if(detail != null) {
+                FavoriteRepository.getInstance().insert(
+                        new Favorite(detail.getId(),
+                                stat, detail.getTitle(), detail.getPosterPath()));
+            }
         }
     }
 
@@ -108,10 +108,9 @@ public class DetailViewModel extends ViewModel {
         Observable.zip(
             rq,new Function<Object[], Object>() {
             @Override
-            public Object apply(Object[] objects) throws Exception {
+            public Object apply(Object[] objects) {
                 Detail detail = new Detail();
                 if(objects.length == 0) return detail;
-
                 detail = (Detail)objects[0];
 
                 if(objects.length>=2){

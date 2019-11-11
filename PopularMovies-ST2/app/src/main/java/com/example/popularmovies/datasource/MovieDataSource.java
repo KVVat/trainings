@@ -27,15 +27,15 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
     private MovieSortMode mSortMode=MovieSortMode.SORT_MODE_POPULAR;
 
     /**
-     * helper for favoirte
-     * @param offset
-     * @return
+     * Helper for favoirte. This method loads Favorite data form repository then turn them into Movie type.
+     * @param offset offset of favorite list
+     * @return Movie type list that made up by favorite list.
      */
     private List<Movie> favoriteToMovieList(Integer offset){
-        List<Favorite> fabs = FavoriteRepository.getInstance().getFavoriteLimitOffset(PAGE_SIZE,offset);
-        if(fabs != null){
+        List<Favorite> favorites = FavoriteRepository.getInstance().getFavoriteLimitOffset(PAGE_SIZE,offset);
+        if(favorites != null){
             List<Movie> lm = new ArrayList<>();
-            for(Favorite fab:fabs){
+            for(Favorite fab:favorites){
                 Movie mv = new Movie(fab);
                 lm.add(mv);
             }
@@ -49,14 +49,14 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
         if(mSortMode == MovieSortMode.SORT_MODE_POPULAR || mSortMode == MovieSortMode.SORT_MODE_TOPRATED) {
             MoviesDbRepository.getInstance().getMoviesByPageCb(new Callback<ResultMovies>() {
                 @Override
-                public void onResponse(Call<ResultMovies> call, Response<ResultMovies> response) {
-                    if (response != null && response.body() != null) {
+                public void onResponse(@NonNull Call<ResultMovies> call, @NonNull Response<ResultMovies> response) {
+                    if (response.body() != null) {
                         List<Movie> lm = response.body().getMovies();
                         callback.onResult(lm, null, FIRST_PAGE + 1);
                     }
                 }
                 @Override
-                public void onFailure(Call<ResultMovies> call, Throwable t) { }
+                public void onFailure(@NonNull Call<ResultMovies> call, Throwable t) { }
             }, mSortMode.getKey(), FIRST_PAGE);
         } else if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
 
@@ -73,14 +73,14 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
         if(mSortMode == MovieSortMode.SORT_MODE_POPULAR || mSortMode == MovieSortMode.SORT_MODE_TOPRATED) {
             MoviesDbRepository.getInstance().getMoviesByPageCb(new Callback<ResultMovies>() {
                 @Override
-                public void onResponse(Call<ResultMovies> call, Response<ResultMovies> response) {
-                    if (response != null && response.body() != null) {
+                public void onResponse(@NonNull Call<ResultMovies> call, @NonNull Response<ResultMovies> response) {
+                    if (response.body() != null) {
                         List<Movie> lm = response.body().getMovies();
                         callback.onResult(lm, adjacentKey);
                     }
                 }
                 @Override
-                public void onFailure(Call<ResultMovies> call, Throwable t) { }
+                public void onFailure(@NonNull Call<ResultMovies> call,@NonNull Throwable t) { }
             }, mSortMode.getKey(), params.key);
         } else if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
             List<Movie> lm = favoriteToMovieList(params.key*PAGE_SIZE);
@@ -95,8 +95,8 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
 
             MoviesDbRepository.getInstance().getMoviesByPageCb(new Callback<ResultMovies>() {
                 @Override
-                public void onResponse(Call<ResultMovies> call, Response<ResultMovies> response) {
-                    if (response != null && response.body() != null) {
+                public void onResponse(@NonNull Call<ResultMovies> call,@NonNull Response<ResultMovies> response) {
+                    if (response.body() != null) {
                         List<Movie> lm = response.body().getMovies();
                         Integer key = lm.size() > 0 ? params.key + 1 : null;
                         callback.onResult(response.body().getMovies(), key);
@@ -104,7 +104,7 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
                 }
 
                 @Override
-                public void onFailure(Call<ResultMovies> call, Throwable t) {
+                public void onFailure(@NonNull Call<ResultMovies> call,@NonNull Throwable t) {
 
                 }
             }, mSortMode.getKey(), params.key);

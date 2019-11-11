@@ -23,8 +23,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private int layoutId;
     private DetailViewModel viewModel;
 
-    private int layoutHeaderId=R.layout.trailer_header;
-
     public TrailerAdapter(@LayoutRes int layoutId, DetailViewModel viewModel) {
         this.layoutId = layoutId;
         this.viewModel = viewModel;
@@ -82,7 +80,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private int getLayoutIdForPosition(int position) {
-        if (position==0) return this.layoutHeaderId;
+        if (position==0) return R.layout.trailer_header;
         else return this.layoutId;
     }
     @Override

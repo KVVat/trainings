@@ -20,8 +20,6 @@ import com.example.popularmovies.model.Movie;
 
 public class MainViewModel extends ViewModel {
 
-    private String TAG="MainViewModel";
-
     public LiveData<PagedList<Movie>> moviePagedList;
     private LiveData<PageKeyedDataSource<Integer, Movie>> liveDataSource;
 
@@ -55,8 +53,8 @@ public class MainViewModel extends ViewModel {
     public DataSource<?,Movie> getMovieDatasource(){
         PagedList<Movie> pagedList = moviePagedList.getValue();
         if(pagedList!=null){
-            DataSource<?, Movie> dataSource = pagedList.getDataSource();
-            return dataSource;
+            //DataSource<?, Movie>
+            return pagedList.getDataSource();
         }
         return null;
     }
