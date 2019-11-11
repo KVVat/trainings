@@ -24,7 +24,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -62,13 +61,10 @@ public class DetailViewModel extends ViewModel {
 
     public void getIsFavorite(Integer movieId){
         //Use RxJava2 to implement Room query.
-        Single.create(new SingleOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(SingleEmitter<Boolean> emitter)  {
-                Boolean b = FavoriteRepository.getInstance().isFavoirte(movieId);
-                if(b == null) b=false;
-                emitter.onSuccess(b);
-            }
+        Single.create((SingleOnSubscribe<Boolean>) emitter -> {
+            Boolean b = FavoriteRepository.getInstance().isFavoirte(movieId);
+            if(b == null) b=false;
+            emitter.onSuccess(b);
         }).subscribeOn(Schedulers.io()).subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) { }
@@ -106,9 +102,7 @@ public class DetailViewModel extends ViewModel {
         error.set(View.GONE);
 
         Observable.zip(
-            rq,new Function<Object[], Object>() {
-            @Override
-            public Object apply(Object[] objects) {
+            rq, (Function<Object[], Object>) objects -> {
                 Detail detail = new Detail();
                 if(objects.length == 0) return detail;
                 detail = (Detail)objects[0];
@@ -120,7 +114,7 @@ public class DetailViewModel extends ViewModel {
                     detail.setReviews((Reviews)objects[2]);
                 }
                 return detail;
-            }}).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<Object>() {
                     @Override
                     public void onNext(Object o) {
