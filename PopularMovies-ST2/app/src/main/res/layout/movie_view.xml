@@ -20,6 +20,8 @@
         app:cardCornerRadius="0dp"
         android:clickable="true"
         android:focusable="false">
+        <!-- I need to set layout_height in ImageView.-->
+        <!-- In case the value not defined recycler view update not works fine. -->
         <ImageView
             android:id="@+id/poster_view"
             android:layout_width="match_parent"

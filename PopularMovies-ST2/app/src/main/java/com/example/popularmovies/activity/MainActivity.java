@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        //outState.putParcelable(BUNDLE_RECYCLER_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
+
         super.onSaveInstanceState(outState);
     }
 
