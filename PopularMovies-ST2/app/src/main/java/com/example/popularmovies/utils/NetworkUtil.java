@@ -12,10 +12,13 @@ import com.example.popularmovies.applilcation.ApplicationContext;
  * isOnline method checks, Is device network available in proper way.
  */
 public class NetworkUtil {
+
     public static boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) ApplicationContext.
                 instance.getSystemService(Context.CONNECTIVITY_SERVICE);
+
         if(cm == null) return false;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             Network nw = cm.getActiveNetwork();
@@ -30,12 +33,19 @@ public class NetworkUtil {
             );
         } else {
             //Deprecated way in Android PI//
-            NetworkInfo ninfo = cm.getActiveNetworkInfo();
-            if(ninfo != null) {
-                return ninfo.isConnected();
-            } else {
-                return false;
-            }
+            return NetworkUtil.deprecatedWayIsOnline(cm);
         }
+    }
+
+
+    private static boolean deprecatedWayIsOnline(ConnectivityManager cm)
+    {
+        NetworkInfo ninfo = cm.getActiveNetworkInfo();
+        if(ninfo != null) {
+            return ninfo.isConnected();
+        } else {
+            return false;
+        }
+
     }
 }
