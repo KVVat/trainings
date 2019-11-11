@@ -4,21 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Trailer implements Parcelable {
-    public Trailer(String id, String key, String site, Integer size, String name, String type) {
-        this.id = id;
-        this.key = key;
-        this.site = site;
-        this.size = size;
-        this.name = name;
-        this.type = type;
-    }
 
-    String id;
-    String key;
-    String site;
-    Integer size;
-    String name;
-    String type;
+
+    private String id;
+    private String key;
+    private String site;
+    private Integer size;
+    private String name;
+    private String type;
 
     public String getId() {
         return id;

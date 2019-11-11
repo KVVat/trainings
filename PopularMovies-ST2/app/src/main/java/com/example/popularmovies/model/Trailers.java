@@ -9,9 +9,9 @@ import java.util.List;
 
 public class Trailers implements Parcelable {
 
-    String id;
+    private String id;
     @SerializedName("results")
-    List<Trailer> results;
+    private List<Trailer> results;
 
     public String getId() {
         return id;

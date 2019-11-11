@@ -8,13 +8,13 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Reviews implements Parcelable {
-    Integer id;
-    Integer page;
+    private Integer id;
+    private Integer page;
     @SerializedName("total_pages")
-    Integer totalPages;
+    private Integer totalPages;
     @SerializedName("total_results")
-    Integer totalResults;
-    List<Review> results;
+    private Integer totalResults;
+    private List<Review> results;
 
     public Integer getId() {
         return id;

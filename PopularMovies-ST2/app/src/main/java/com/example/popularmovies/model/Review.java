@@ -4,10 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Review implements Parcelable {
-    String id;
-    String content;
-    String author;
-    String url;
+    private String id;
+    private String content;
+    private String author;
+    private String url;
 
     public String getId() {
         return id;
@@ -56,9 +56,10 @@ public class Review implements Parcelable {
     }
 
     public Review() {
+
     }
 
-    protected Review(Parcel in) {
+    Review(Parcel in) {
         this.id = in.readString();
         this.content = in.readString();
         this.author = in.readString();

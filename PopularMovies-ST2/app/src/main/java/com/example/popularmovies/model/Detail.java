@@ -9,37 +9,39 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * https://developers.themoviedb.org/3/movies/get-movie-details
+ *
+ * Of course, There are tons of unused properties.
+ * And, I removed some unused properties for implement Parcelable.
  */
 public class Detail implements Parcelable {
-    Boolean adult;
-    String backdropPath;
-    String belongsToCollection;
-    Integer budget;
+    private Boolean adult;
+    private String backdropPath;
+    private String belongsToCollection;
+    private Integer budget;
     //List<Genre> genres;
-    Integer id;
-    String imdbId;
-    String originalLanguage;
+    private Integer id;
+    private String imdbId;
+    private String originalLanguage;
     @SerializedName("original_title")
-    String originalTitle;
-    String overview;
-    Double popularity;
+    private String originalTitle;
+    private String overview;
+    private Double popularity;
     @SerializedName("poster_path")
-    String posterPath;
+    private String posterPath;
     //List<ProductionCompany> productionCompanies;
     //List<ProductionCountry> productionCountries;
     @SerializedName("release_date")
-    String releaseDate;
-    Long revenue;
-    Integer runtime;
+    private String releaseDate;
+    private Long revenue;
+    private Integer runtime;
     //List<SpokenLaunguage> spokenLanguages;
-    String status;
-    String tagline;
-    String title;
-    Boolean video;
+    private String status;
+    private String tagline;
+    private String title;
+    private Boolean video;
     @SerializedName("vote_average")
-    Double voteAverage;
-    Integer voteCount;
-
+    private Double voteAverage;
+    private Integer voteCount;
 
 
     public Boolean getAdult() {
@@ -211,7 +213,6 @@ public class Detail implements Parcelable {
         this.video = video;
     }
 
-
     public Integer getVoteCount() {
         return voteCount;
     }
@@ -237,7 +238,7 @@ public class Detail implements Parcelable {
     }
 
     /* Exclude : For Data Transfer*/
-    Trailers trailers;
+    private Trailers trailers;
 
     public Trailers getTrailers() {
         return trailers;
@@ -247,7 +248,7 @@ public class Detail implements Parcelable {
         this.trailers = trailers;
     }
 
-    Reviews reviews;
+    private Reviews reviews;
 
     public Reviews getReviews() {
         return reviews;

@@ -18,7 +18,7 @@ public class Favorite {
     @ColumnInfo(name = "poster_path")
     private String posterPath;
 
-    public Favorite(Integer movieId,
+    public Favorite(@NonNull Integer movieId,
                     Boolean isFavorite,String title,String posterPath){
         this.movieId = movieId;
         this.isFavorite = isFavorite;
