@@ -56,7 +56,7 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
                     }
                 }
                 @Override
-                public void onFailure(@NonNull Call<ResultMovies> call, Throwable t) { }
+                public void onFailure(@NonNull Call<ResultMovies> call,@NonNull Throwable t) { }
             }, mSortMode.getKey(), FIRST_PAGE);
         } else if(mSortMode == MovieSortMode.SORT_MODE_FAVORITE){
 
