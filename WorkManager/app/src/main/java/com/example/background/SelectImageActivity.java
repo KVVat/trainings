@@ -51,6 +51,8 @@ public class SelectImageActivity extends AppCompatActivity {
 
     private int mPermissionRequestCount;
 
+    private void L(String s){ Log.d(TAG,s);}
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +132,7 @@ public class SelectImageActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_IMAGE:
@@ -155,7 +158,7 @@ public class SelectImageActivity extends AppCompatActivity {
             Log.e(TAG, "Invalid input image Uri.");
             return;
         }
-
+        L("handle Image Request Result");
         Intent filterIntent = new Intent(this, BlurActivity.class);
         filterIntent.putExtra(Constants.KEY_IMAGE_URI, imageUri.toString());
         startActivity(filterIntent);

@@ -30,19 +30,25 @@ public class SaveImageToFileWorker extends Worker {
     private static final SimpleDateFormat DATE_FORMATTER =
             new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss z", Locale.getDefault());
 
+    private void L(String s){ Log.d("SaveImagesWorker",s);}
 
     @NonNull
     @Override
     public Result doWork() {
+
         Context applicationContext = getApplicationContext();
         ContentResolver resolver = applicationContext.getContentResolver();
+        L("SaveImagesWorker doWork");
         try {
+            L("SaveImagesWorker doWork2");
             String resourceUri = getInputData()
                     .getString(Constants.KEY_IMAGE_URI);
+            L("OutputUri>"+resourceUri);
             Bitmap bitmap = BitmapFactory.decodeStream(
                     resolver.openInputStream(Uri.parse(resourceUri)));
             String outputUri = MediaStore.Images.Media.insertImage(
                     resolver, bitmap, TITLE, DATE_FORMATTER.format(new Date()));
+            L("OutputUri>"+outputUri);
             if (TextUtils.isEmpty(outputUri)) {
                 Log.e(TAG, "Writing to MediaStore failed");
                 return Result.failure();

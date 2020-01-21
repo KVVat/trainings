@@ -19,6 +19,7 @@ package com.example.background;
 import android.app.Application;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.background.workers.BlurWorker;
 import com.example.background.workers.CleanupWorker;
@@ -45,7 +46,7 @@ public class BlurViewModel extends AndroidViewModel {
 
     private Uri mImageUri;
     private WorkManager mWorkManager;
-    private LiveData<List<WorkInfo>> mSavedWorkInfo;
+    public LiveData<List<WorkInfo>> mSavedWorkInfo;
     private Uri mOutputUri;
     public BlurViewModel(@NonNull Application application) {
 
@@ -54,14 +55,13 @@ public class BlurViewModel extends AndroidViewModel {
         mSavedWorkInfo = mWorkManager.getWorkInfosByTagLiveData(TAG_OUTPUT);
 
     }
-
+    private void L(String s){ Log.d("BlurViewModel",s);}
     /**
      * Create the WorkRequest to apply the blur and save the resulting image
      * @param blurLevel The amount to blur the image
      */
     void applyBlur(int blurLevel) {
-
-
+        L("applyBlur");
 
         WorkContinuation continuation =
                 //mWorkManager.beginWith(OneTimeWorkRequest.from(CleanupWorker.class));
@@ -98,7 +98,7 @@ public class BlurViewModel extends AndroidViewModel {
 
         // Actually start the work
         continuation.enqueue();
-
+        L("applyBlur Finished");
         /*
         OneTimeWorkRequest blurRequest =
                 new OneTimeWorkRequest.Builder(BlurWorker.class)
@@ -140,6 +140,8 @@ public class BlurViewModel extends AndroidViewModel {
     LiveData<List<WorkInfo>> getOutputWorkInfo() { return mSavedWorkInfo; }
 
     private Data createInputDataForUri(){
+        L("createInputDataForUri");
+
         Data.Builder builder = new Data.Builder();
         if(mImageUri != null){
             builder.putString(KEY_IMAGE_URI,mImageUri.toString());

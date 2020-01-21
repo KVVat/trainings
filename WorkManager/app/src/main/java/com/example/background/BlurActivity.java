@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,10 +43,11 @@ public class BlurActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private Button mGoButton, mOutputButton, mCancelButton;
 
-
+    private void L(String s){ Log.d("BlurActivity",s);}
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        L("OnCreate");
         setContentView(R.layout.activity_blur);
 
         // Get the ViewModel
@@ -79,10 +81,15 @@ public class BlurActivity extends AppCompatActivity {
                 }
             }
         });
-        mViewModel.getOutputWorkInfo().observe(this,listOfWorkInfos->{
+        mViewModel.mSavedWorkInfo.observe(this,listOfWorkInfos->{
+            Log.d("mSavedWorkInfo Mutable","Changed!");
+            Log.d("mSavedWorkInfo Mutable","Work Changed:"+listOfWorkInfos.size());
             if(listOfWorkInfos==null || listOfWorkInfos.isEmpty()) return;
+            //return;
+
             WorkInfo workInfo = listOfWorkInfos.get(0);
             boolean finished = workInfo.getState().isFinished();
+            Log.d("mSavedWorkInfo Mutable","Status:"+finished);
             if(!finished){
                 showWorkInProgress();
             } else {
